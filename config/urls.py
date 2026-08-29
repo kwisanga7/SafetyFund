@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.urls import path, include
+
 from .views import home, about, contact
 
 urlpatterns = [
@@ -10,4 +11,6 @@ urlpatterns = [
     path('contact/', contact, name='contact'),
 
     path('', include('accounts.urls')),
+    path('', include('membership.urls')),
+    path('', include('finance.urls')),
 ]

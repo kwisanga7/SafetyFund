@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>User Dashboard</h1>
+
+<hr>
+
+<h3>Welcome {{ user.username }}</h3>
+
+<p>Email: {{ user.email }}</p>
+
+<p>Role: {{ user.role }}</p>
+
+<p>Phone Number: {{ user.phone_number }}</p>
+
+{% if membership %}
+
+<hr>
+
+<h4>Membership Information</h4>
+
+<p>
+    <strong>Status:</strong>
+    {{ membership.status }}
+</p>
+
+<p>
+    <strong>Member Number:</strong>
+    {{ membership.member_number }}
+</p>
+
+{% endif %}
+
+{% if user.role == 'USER' %}
+
+<a href="/apply-membership/"
+   class="btn btn-success">
+   Apply for Membership
+</a>
+
+{% endif %}
+
+{% if user.role == 'MEMBER' %}
+
+<hr>
+
+<h4>Financial Summary</h4>
+
+<p>
+    <strong>Total Shares:</strong>
+    {{ total_shares }}
+</p>
+
+<p>
+    <strong>Savings Value:</strong>
+    {{ savings_value }} RWF
+</p>
+
+<p>
+    <strong>Maximum Loan Available:</strong>
+    {{ maximum_loan }} RWF
+</p>
+<p>
+    <strong>Locked Shares:</strong>
+    {{ locked_shares }}
+</p>
+
+<p>
+    <strong>Available Shares:</strong>
+    {{ available_shares }}
+</p>
+
+<p>
+    <strong>Available Loan Capacity:</strong>
+    {{ available_loan }} RWF
+</p>
+
+{% endif %}
+
+{% if user.role == 'MEMBER' %}
+
+<a href="/request-loan/"
+   class="btn btn-warning">
+   Request Loan
+</a>
+
+{% endif %}
+
+{% endblock %}
