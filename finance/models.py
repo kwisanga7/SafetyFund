@@ -7,38 +7,25 @@ from decimal import Decimal
 
 class ShareTransaction(models.Model):
 
-    SHARE_PRICE = 5000
-
     member = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
     )
 
-    shares = models.PositiveIntegerField()
+    shares = models.IntegerField()
 
     amount = models.DecimalField(
         max_digits=12,
-        decimal_places=2,
-        editable=False
+        decimal_places=2
     )
 
-    month = models.CharField(max_length=20)
+    month = models.IntegerField()
 
     year = models.IntegerField()
 
     created_at = models.DateTimeField(
         auto_now_add=True
     )
-
-    def save(self, *args, **kwargs):
-        self.amount = self.shares * self.SHARE_PRICE
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return (
-            f"{self.member.username} - "
-            f"{self.shares} shares"
-        )
 
 class Loan(models.Model):
 
@@ -127,3 +114,74 @@ class Loan(models.Model):
             )
 
      super().save(*args, **kwargs)
+
+class LoanRepayment(models.Model):
+
+    loan = models.ForeignKey(
+        Loan,
+        on_delete=models.CASCADE
+    )
+
+    amount_paid = models.DecimalField(
+        max_digits=12,
+        decimal_places=2
+    )
+
+    paid_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    received_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True
+    )
+
+    def __str__(self):
+        return (
+            f"{self.loan.member.username}"
+            f" - {self.amount_paid}"
+        )
+
+class DepositRequest(models.Model):
+
+    STATUS_CHOICES = (
+        ('PENDING', 'Pending'),
+        ('APPROVED', 'Approved'),
+        ('REJECTED', 'Rejected'),
+    )
+
+    member = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
+    amount = models.DecimalField(
+        max_digits=12,
+        decimal_places=2
+    )
+
+    payment_proof = models.ImageField(
+        upload_to='deposits/'
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='PENDING'
+    )
+
+    submitted_at = models.DateTimeField(
+        auto_now_add=True
+    )
+
+    reviewed_at = models.DateTimeField(
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return (
+            f"{self.member.username}"
+            f" - {self.amount}"
+        )

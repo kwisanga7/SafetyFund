@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Pending Loan Requests</h2>
+
+<table class="table">
+
+    <thead>
+        <tr>
+            <th>Member</th>
+            <th>Amount</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for loan in loans %}
+
+        <tr>
+
+            <td>{{ loan.member.username }}</td>
+
+            <td>{{ loan.requested_amount }}</td>
+
+            <td>
+
+                <a href="/approve-loan/{{ loan.id }}/"
+                   class="btn btn-success">
+
+                   Approve
+
+                </a>
+
+                <a href="/reject-loan/{{ loan.id }}/"
+                   class="btn btn-danger">
+
+                   Reject
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

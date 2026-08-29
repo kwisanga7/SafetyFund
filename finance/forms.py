@@ -1,8 +1,8 @@
 from django import forms
 from .models import Loan
 from django.db.models import Sum
-
 from .models import Loan, ShareTransaction
+from .models import DepositRequest
 
 
 class LoanRequestForm(forms.ModelForm):
@@ -58,3 +58,15 @@ class LoanRequestForm(forms.ModelForm):
             )
 
         return requested_amount
+
+
+
+
+class DepositRequestForm(forms.ModelForm):
+
+    class Meta:
+        model = DepositRequest
+        fields = [
+            'amount',
+            'payment_proof'
+        ]

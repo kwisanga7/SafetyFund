@@ -85,6 +85,65 @@
    Request Loan
 </a>
 
+<a href="/deposit-request/"
+   class="btn btn-primary">
+   Make Deposit
+</a>
+
 {% endif %}
+<hr>
+
+<h3>My Loans</h3>
+
+<table class="table table-bordered">
+
+    <thead>
+        <tr>
+            <th>Requested</th>
+            <th>Disbursed</th>
+            <th>Status</th>
+            <th>Due Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for loan in member_loans %}
+
+        <tr>
+
+            <td>
+                {{ loan.requested_amount }}
+            </td>
+
+            <td>
+                {{ loan.disbursed_amount }}
+            </td>
+
+            <td>
+                {{ loan.status }}
+            </td>
+
+            <td>
+                {{ loan.due_date }}
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="4">
+                No loans found.
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
 
 {% endblock %}

@@ -8,6 +8,7 @@ from django.db import models
 from finance.models import Loan
 
 
+
 def register(request):
 
     if request.method == 'POST':
@@ -87,6 +88,10 @@ def dashboard(request):
     available_loan = (
     available_shares * 5000
     )
+
+    member_loans = Loan.objects.filter(
+    member=request.user
+    ).order_by('-id')
     
 
     context = {
@@ -96,6 +101,7 @@ def dashboard(request):
         'available_shares': available_shares,
         'savings_value': savings_value,
         'available_loan': available_loan,
+        'member_loans': member_loans,
     }
 
     return render(

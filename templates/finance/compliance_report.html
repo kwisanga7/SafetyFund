@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Contribution Compliance Report</h2>
+
+<table class="table table-bordered">
+
+    <tr>
+        <th>Member</th>
+        <th>Shares</th>
+        <th>Status</th>
+    </tr>
+
+    {% for item in report %}
+
+    <tr>
+
+        <td>{{ item.member.username }}</td>
+
+        <td>{{ item.shares }}</td>
+
+        <td>{{ item.status }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endblock %}

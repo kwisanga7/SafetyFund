@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Pending Deposits</h2>
+
+<table class="table">
+
+    <tr>
+        <th>Member</th>
+        <th>Amount</th>
+        <th>Proof</th>
+        <th>Action</th>
+    </tr>
+
+    {% for deposit in deposits %}
+
+    <tr>
+
+        <td>{{ deposit.member.username }}</td>
+
+        <td>{{ deposit.amount }}</td>
+
+        <td>
+            <a href="{{ deposit.payment_proof.url }}"
+               target="_blank">
+               View Proof
+            </a>
+        </td>
+
+        <td>
+
+            <a href="/approve-deposit/{{ deposit.id }}/"
+               class="btn btn-success">
+
+               Approve
+
+            </a>
+
+            <a href="/reject-deposit/{{ deposit.id }}/"
+               class="btn btn-danger">
+
+               Reject
+
+            </a>
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endblock %}
