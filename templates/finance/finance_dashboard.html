@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Finance Dashboard</h1>
+
+<hr>
+
+<div class="row">
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Total Members</h5>
+                <h2>{{ total_members }}</h2>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Total Shares</h5>
+                <h2>{{ total_shares }}</h2>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Total Savings</h5>
+                <h2>{{ total_savings }} RWF</h2>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Pending Loans</h5>
+                <h2>{{ pending_loans }}</h2>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Approved Loans</h5>
+                <h2>{{ approved_loans }}</h2>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Outstanding Loans</h5>
+                <h2>{{ outstanding_loans }} RWF</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -37,10 +37,14 @@ def login_user(request):
         )
 
         if user is not None:
-            login(request, user)
-            return redirect('home')
+         print("LOGIN SUCCESS:", user.username, user.role)
+         login(request, user)
+         return redirect('home')
+        else:
+         print("LOGIN FAILED")
 
     return render(request, 'accounts/login.html')
+    
 
 
 def logout_user(request):

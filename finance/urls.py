@@ -1,5 +1,6 @@
 from django.urls import path
-from .views import request_loan
+from .views import request_loan, finance_dashboard
+
 
 urlpatterns = [
 
@@ -7,6 +8,12 @@ urlpatterns = [
         'request-loan/',
         request_loan,
         name='request_loan'
+    ),
+
+    path(
+        'finance-dashboard/',
+        finance_dashboard,
+        name='finance_dashboard'
     ),
 
 ]
