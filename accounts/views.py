@@ -6,6 +6,8 @@ from finance.models import ShareTransaction
 from membership.models import MembershipApplication
 from django.db import models
 from finance.models import Loan
+from finance.models import DepositRequest
+from finance.models import ShareTransaction, Loan
 
 
 
@@ -92,7 +94,36 @@ def dashboard(request):
     member_loans = Loan.objects.filter(
     member=request.user
     ).order_by('-id')
-    
+
+    member_deposits = DepositRequest.objects.filter(
+    member=request.user
+    ).order_by('-submitted_at')
+
+    total_shares = sum(
+    transaction.shares
+    for transaction in ShareTransaction.objects.filter(
+        member=request.user
+    )
+    )
+
+    locked_shares = sum(
+    loan.locked_shares
+    for loan in Loan.objects.filter(
+        member=request.user,
+        status='APPROVED'
+    )
+    )
+
+    share_value = total_shares * 5000
+
+    available_shares = (
+    total_shares - locked_shares
+    )
+
+    active_loans = Loan.objects.filter(
+    member=request.user,
+    status='APPROVED'
+    ).count()
 
     context = {
         'membership': membership,
@@ -102,6 +133,9 @@ def dashboard(request):
         'savings_value': savings_value,
         'available_loan': available_loan,
         'member_loans': member_loans,
+        'member_deposits': member_deposits,
+        'share_value': share_value,
+        'active_loans': active_loans,
     }
 
     return render(
@@ -109,3 +143,4 @@ def dashboard(request):
         'accounts/dashboard.html',
         context
     )
+   

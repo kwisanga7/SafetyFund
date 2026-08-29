@@ -2,16 +2,180 @@
 
 {% block content %}
 
-<div class="text-center">
-    <h1>Welcome to SafetyFund</h1>
+<!-- Hero Section -->
+<section class="hero-section">
 
-    <p class="lead">
-        Saving, Shares and Loan Management System
-    </p>
+    <div class="container text-center">
 
-    <a href="#" class="btn btn-primary">
-        Apply for Membership
-    </a>
-</div>
+        <h1 class="display-3 fw-bold">
+            Welcome to SafetyFund
+        </h1>
+
+        <p class="lead mt-3">
+
+            A modern savings and loan platform designed
+            to help members save, invest in shares,
+            access loans and build financial security.
+
+        </p>
+
+        {% if not user.is_authenticated %}
+
+            <a href="/register/"
+               class="btn btn-success btn-lg mt-3">
+
+                Join SafetyFund
+
+            </a>
+
+            <a href="/login/"
+               class="btn btn-outline-light btn-lg mt-3">
+
+                Login
+
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<!-- Features -->
+<section class="py-5">
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-4">
+
+                <div class="card feature-card">
+
+                    <div class="card-body text-center">
+
+                        <h3>💰 Savings</h3>
+
+                        <p>
+
+                            Build your financial future
+                            through deposits and shares.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card feature-card">
+
+                    <div class="card-body text-center">
+
+                        <h3>🤝 Loans</h3>
+
+                        <p>
+
+                            Access affordable loans based
+                            on your share ownership.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+
+                <div class="card feature-card">
+
+                    <div class="card-body text-center">
+
+                        <h3>📊 Transparency</h3>
+
+                        <p>
+
+                            Track deposits, shares,
+                            loans and repayments online.
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- How it Works -->
+<section class="bg-light py-5">
+
+    <div class="container">
+
+        <h2 class="text-center mb-5">
+
+            How SafetyFund Works
+
+        </h2>
+
+        <div class="row text-center">
+
+            <div class="col-md-3">
+
+                <h1>1️⃣</h1>
+
+                <h5>Register</h5>
+
+                <p>Create your account.</p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h1>2️⃣</h1>
+
+                <h5>Apply</h5>
+
+                <p>Apply for membership approval.</p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h1>3️⃣</h1>
+
+                <h5>Save</h5>
+
+                <p>Deposit money and build shares.</p>
+
+            </div>
+
+            <div class="col-md-3">
+
+                <h1>4️⃣</h1>
+
+                <h5>Grow</h5>
+
+                <p>Request loans and manage finances.</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
 
 {% endblock %}

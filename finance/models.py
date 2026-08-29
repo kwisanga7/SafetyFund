@@ -78,6 +78,12 @@ class Loan(models.Model):
         blank=True
     )
 
+    remaining_balance = models.DecimalField(
+    max_digits=12,
+    decimal_places=2,
+    default=0
+    )
+
     def __str__(self):
         return (
             f"{self.member.username} - "
@@ -113,9 +119,18 @@ class Loan(models.Model):
                 timedelta(days=30)
             )
 
+        if not self.pk:
+         self.remaining_balance = self.requested_amount
+
      super().save(*args, **kwargs)
 
 class LoanRepayment(models.Model):
+
+    STATUS_CHOICES = (
+        ('PENDING', 'Pending'),
+        ('APPROVED', 'Approved'),
+        ('REJECTED', 'Rejected'),
+    )
 
     loan = models.ForeignKey(
         Loan,
@@ -127,21 +142,22 @@ class LoanRepayment(models.Model):
         decimal_places=2
     )
 
+    payment_proof = models.FileField(
+       upload_to='loan_repayments/',
+      null=True,
+      blank=True
+    )
+    
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default='PENDING'
+    )
+
     paid_at = models.DateTimeField(
         auto_now_add=True
     )
-
-    received_by = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.SET_NULL,
-        null=True
-    )
-
-    def __str__(self):
-        return (
-            f"{self.loan.member.username}"
-            f" - {self.amount_paid}"
-        )
 
 class DepositRequest(models.Model):
 

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Active Loans</h2>
+
+<table class="table">
+
+<tr>
+    <th>Member</th>
+    <th>Loan Amount</th>
+    <th>Remaining Balance</th>
+    <th>Action</th>
+</tr>
+
+{% for loan in loans %}
+
+<tr>
+
+    <td>{{ loan.member.username }}</td>
+
+    <td>{{ loan.requested_amount }}</td>
+
+    <td>{{ loan.remaining_balance }}</td>
+
+    <td>
+
+        <a href="/record-repayment/{{ loan.id }}/"
+           class="btn btn-success">
+
+            Record Repayment
+
+        </a>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

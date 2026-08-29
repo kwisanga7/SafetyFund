@@ -2,148 +2,129 @@
 
 {% block content %}
 
-<h1>User Dashboard</h1>
+<h2 class="mb-4">
+    Member Dashboard
+</h2>
 
-<hr>
+<div class="row">
 
-<h3>Welcome {{ user.username }}</h3>
+    <div class="col-md-3">
 
-<p>Email: {{ user.email }}</p>
+        <div class="dashboard-card card-shares">
 
-<p>Role: {{ user.role }}</p>
+            <h5>Total Shares</h5>
 
-<p>Phone Number: {{ user.phone_number }}</p>
+            <h2>
+                {{ total_shares }}
+            </h2>
 
-{% if membership %}
+        </div>
 
-<hr>
+    </div>
 
-<h4>Membership Information</h4>
+    <div class="col-md-3">
 
-<p>
-    <strong>Status:</strong>
-    {{ membership.status }}
-</p>
+        <div class="dashboard-card card-deposits">
 
-<p>
-    <strong>Member Number:</strong>
-    {{ membership.member_number }}
-</p>
+            <h5>Total Deposits</h5>
 
-{% endif %}
+            <h2>
+                {{ total_deposits }}
+            </h2>
 
-{% if user.role == 'USER' %}
+        </div>
 
-<a href="/apply-membership/"
-   class="btn btn-success">
-   Apply for Membership
-</a>
+    </div>
 
-{% endif %}
+    <div class="col-md-3">
 
-{% if user.role == 'MEMBER' %}
+        <div class="dashboard-card card-loans">
 
-<hr>
+            <h5>Active Loans</h5>
 
-<h4>Financial Summary</h4>
+            <h2>
+                {{ active_loans }}
+            </h2>
 
-<p>
-    <strong>Total Shares:</strong>
-    {{ total_shares }}
-</p>
+        </div>
 
-<p>
-    <strong>Savings Value:</strong>
-    {{ savings_value }} RWF
-</p>
+    </div>
 
-<p>
-    <strong>Maximum Loan Available:</strong>
-    {{ maximum_loan }} RWF
-</p>
-<p>
-    <strong>Locked Shares:</strong>
-    {{ locked_shares }}
-</p>
+    <div class="col-md-3">
 
-<p>
-    <strong>Available Shares:</strong>
-    {{ available_shares }}
-</p>
+        <div class="dashboard-card card-pending">
 
-<p>
-    <strong>Available Loan Capacity:</strong>
-    {{ available_loan }} RWF
-</p>
+            <h5>Pending Requests</h5>
 
-{% endif %}
+            <h2>
+                {{ pending_requests }}
+            </h2>
 
-{% if user.role == 'MEMBER' %}
+        </div>
 
-<a href="/request-loan/"
-   class="btn btn-warning">
-   Request Loan
-</a>
+    </div>
 
-<a href="/deposit-request/"
-   class="btn btn-primary">
-   Make Deposit
-</a>
+</div>
 
-{% endif %}
-<hr>
+<hr class="my-4">
 
-<h3>My Loans</h3>
+<div class="row mb-4">
 
-<table class="table table-bordered">
+    <div class="col-md-3">
+        <a href="/make-deposit/"
+           class="btn btn-primary w-100">
+            Deposit
+        </a>
+    </div>
 
-    <thead>
-        <tr>
-            <th>Requested</th>
-            <th>Disbursed</th>
-            <th>Status</th>
-            <th>Due Date</th>
-        </tr>
-    </thead>
+    <div class="col-md-3">
+        <a href="/request-loan/"
+           class="btn btn-warning w-100">
+            Loan Request
+        </a>
+    </div>
 
-    <tbody>
+    <div class="col-md-3">
+        <a href="/my-loans/"
+           class="btn btn-dark w-100">
+            My Loans
+        </a>
+    </div>
 
-        {% for loan in member_loans %}
+</div>
 
-        <tr>
+<div class="card shadow-sm">
 
-            <td>
-                {{ loan.requested_amount }}
-            </td>
+    <div class="card-body">
 
-            <td>
-                {{ loan.disbursed_amount }}
-            </td>
+        <h4>
+            Profile Information
+        </h4>
 
-            <td>
-                {{ loan.status }}
-            </td>
+        <hr>
 
-            <td>
-                {{ loan.due_date }}
-            </td>
+        <p>
+            <strong>Username:</strong>
+            {{ user.username }}
+        </p>
 
-        </tr>
+        <p>
+            <strong>Email:</strong>
+            {{ user.email }}
+        </p>
 
-        {% empty %}
+        <p>
+            <strong>Phone:</strong>
+            {{ user.phone_number }}
+        </p>
 
-        <tr>
+        <p>
+            <strong>Role:</strong>
+            {{ user.role }}
+        </p>
 
-            <td colspan="4">
-                No loans found.
-            </td>
+    </div>
 
-        </tr>
-
-        {% endfor %}
-
-    </tbody>
-
-</table>
+</div>
 
 {% endblock %}

@@ -3,7 +3,6 @@
 {% block content %}
 
 <h1>Finance Dashboard</h1>
-
 <hr>
 
 <div class="row">
@@ -17,7 +16,6 @@
         </div>
     </div>
 
-
     <div class="col-md-4 mb-3">
         <div class="card">
             <div class="card-body">
@@ -26,7 +24,6 @@
             </div>
         </div>
     </div>
-
 
     <div class="col-md-4 mb-3">
         <div class="card">
@@ -37,6 +34,32 @@
         </div>
     </div>
 
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Pending Deposits</h5>
+                <h2>{{ pending_deposits }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>Approved Deposits</h5>
+                <h2>{{ approved_deposits }}</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5>This Month's Deposits</h5>
+                <h2>{{ monthly_deposits }} RWF</h2>
+            </div>
+        </div>
+    </div>
 
     <div class="col-md-4 mb-3">
         <div class="card">
@@ -47,16 +70,14 @@
         </div>
     </div>
 
-
     <div class="col-md-4 mb-3">
         <div class="card">
             <div class="card-body">
-                <h5>Approved Loans</h5>
-                <h2>{{ approved_loans }}</h2>
+                <h5>Active Loans</h5>
+                <h2>{{ active_loans }}</h2>
             </div>
         </div>
     </div>
-
 
     <div class="col-md-4 mb-3">
         <div class="card">
@@ -64,22 +85,40 @@
                 <h5>Outstanding Loans</h5>
                 <h2>{{ outstanding_loans }} RWF</h2>
             </div>
-
-            <a href="/pending-loans/"
-   class="btn btn-primary">
-
-   Review Pending Loans
-
-</a>
-<a href="/pending-deposits/"
-   class="btn btn-primary">
-
-   Review Deposits
-
-</a>
         </div>
     </div>
 
 </div>
 
+<div class="row">
+
+    <div class="col-md-3">
+        <a href="/review-deposits/"
+           class="btn finance-btn">
+           Review Deposits
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="/review-loans/"
+           class="btn finance-btn">
+           Review Loans
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="/review-repayments/"
+           class="btn finance-btn">
+           Review Repayments
+        </a>
+    </div>
+
+    <div class="col-md-3">
+        <a href="/compliance-report/"
+           class="btn finance-btn">
+           Compliance Report
+        </a>
+    </div>
+
+</div>
 {% endblock %}

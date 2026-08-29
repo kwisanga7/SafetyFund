@@ -1,19 +1,20 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-from accounts.models import User
 from membership.models import MembershipApplication
-from .models import ShareTransaction, Loan
-from django.shortcuts import get_object_or_404
 from .forms import LoanRequestForm
 from .models import LoanRepayment
 from django.contrib.auth import get_user_model
-from .models import ShareTransaction
 from .forms import DepositRequestForm
-from .models import DepositRequest
 from datetime import datetime
 from decimal import Decimal
 from django.shortcuts import get_object_or_404
+from accounts.models import User
+from .models import ShareTransaction, Loan, DepositRequest
+from .forms import LoanRepaymentForm
+from .forms import MemberRepaymentForm
+from decimal import Decimal
+from finance.models import (ShareTransaction, Loan, DepositRequest)
 
 User = get_user_model()
 
@@ -48,6 +49,7 @@ def request_loan(request):
         {'form': form}
     )
 
+
 @login_required
 def finance_dashboard(request):
 
@@ -56,6 +58,9 @@ def finance_dashboard(request):
             request,
             'finance/access_denied.html'
         )
+
+    current_month = datetime.now().month
+    current_year = datetime.now().year
 
     total_members = User.objects.filter(
         role='MEMBER'
@@ -71,7 +76,7 @@ def finance_dashboard(request):
         status='PENDING'
     ).count()
 
-    approved_loans = Loan.objects.filter(
+    active_loans = Loan.objects.filter(
         status='APPROVED'
     ).count()
 
@@ -81,13 +86,32 @@ def finance_dashboard(request):
         total=Sum('requested_amount')
     )['total'] or 0
 
+    pending_deposits = DepositRequest.objects.filter(
+        status='PENDING'
+    ).count()
+
+    approved_deposits = DepositRequest.objects.filter(
+        status='APPROVED'
+    ).count()
+
+    monthly_deposits = DepositRequest.objects.filter(
+        status='APPROVED',
+        submitted_at__month=current_month,
+        submitted_at__year=current_year
+    ).aggregate(
+        total=Sum('amount')
+    )['total'] or 0
+
     context = {
         'total_members': total_members,
         'total_shares': total_shares,
         'total_savings': total_savings,
         'pending_loans': pending_loans,
-        'approved_loans': approved_loans,
+        'active_loans': active_loans,
         'outstanding_loans': outstanding_loans,
+        'pending_deposits': pending_deposits,
+        'approved_deposits': approved_deposits,
+        'monthly_deposits': monthly_deposits,
     }
 
     return render(
@@ -334,4 +358,239 @@ def pending_deposits(request):
         request,
         'finance/pending_deposits.html',
         {'deposits': deposits}
+    )
+
+@login_required
+def active_loans(request):
+
+    if request.user.role != 'FINANCE':
+        return render(
+            request,
+            'finance/access_denied.html'
+        )
+
+    loans = Loan.objects.filter(
+        status='APPROVED'
+    )
+
+    return render(
+        request,
+        'finance/active_loans.html',
+        {'loans': loans}
+    )
+
+@login_required
+def record_repayment(request, loan_id):
+
+    if request.user.role != 'FINANCE':
+        return render(
+            request,
+            'finance/access_denied.html'
+        )
+
+    loan = Loan.objects.get(id=loan_id)
+
+    if request.method == 'POST':
+
+        form = LoanRepaymentForm(
+            request.POST
+        )
+
+        if form.is_valid():
+
+            repayment = form.save(
+                commit=False
+            )
+
+            repayment.loan = loan
+
+            repayment.save()
+
+            loan.remaining_balance -= (
+                repayment.amount_paid
+            )
+
+            if loan.remaining_balance <= 0:
+
+                loan.remaining_balance = 0
+                loan.status = 'COMPLETED'
+                loan.locked_shares = 0
+
+            loan.save()
+
+            return redirect(
+                'active_loans'
+            )
+
+    else:
+
+        form = LoanRepaymentForm()
+
+    return render(
+        request,
+        'finance/record_repayment.html',
+        {
+            'loan': loan,
+            'form': form
+        }
+    )
+
+
+@login_required
+def make_repayment(request, loan_id):
+
+    loan = Loan.objects.get(
+        id=loan_id,
+        member=request.user
+    )
+
+    if request.method == 'POST':
+
+        form = MemberRepaymentForm(
+            request.POST,
+            request.FILES
+        )
+
+        if form.is_valid():
+
+            repayment = form.save(
+                commit=False
+            )
+
+            repayment.loan = loan
+
+            repayment.save()
+
+            return redirect(
+                'dashboard'
+            )
+
+    else:
+
+        form = MemberRepaymentForm(
+            initial={
+                'amount_paid':
+                loan.remaining_balance
+            }
+        )
+
+    return render(
+        request,
+        'finance/make_repayment.html',
+        {
+            'loan': loan,
+            'form': form
+        }
+    )
+
+@login_required
+def pending_repayments(request):
+
+    if request.user.role != 'FINANCE':
+        return render(
+            request,
+            'finance/access_denied.html'
+        )
+
+    repayments = LoanRepayment.objects.filter(
+        status='PENDING'
+    )
+
+    return render(
+        request,
+        'finance/pending_repayments.html',
+        {
+            'repayments': repayments
+        }
+    )
+
+@login_required
+def approve_repayment(request, repayment_id):
+
+    if request.user.role != 'FINANCE':
+        return render(
+            request,
+            'finance/access_denied.html'
+        )
+
+    repayment = LoanRepayment.objects.get(
+        id=repayment_id
+    )
+
+    if repayment.status == 'PENDING':
+
+        loan = repayment.loan
+
+        loan.remaining_balance -= repayment.amount_paid
+
+        if loan.remaining_balance <= Decimal('0.00'):
+
+            loan.remaining_balance = Decimal('0.00')
+            loan.status = 'COMPLETED'
+            loan.locked_shares = 0
+
+        loan.save()
+
+        repayment.status = 'APPROVED'
+        repayment.save()
+
+    return redirect(
+        'pending_repayments'
+    )
+
+@login_required
+def reject_repayment(request, repayment_id):
+
+    if request.user.role != 'FINANCE':
+        return render(
+            request,
+            'finance/access_denied.html'
+        )
+
+    repayment = LoanRepayment.objects.get(
+        id=repayment_id
+    )
+
+    repayment.status = 'REJECTED'
+    repayment.save()
+
+    return redirect(
+        'pending_repayments'
+    )
+
+
+
+@login_required
+def dashboard(request):
+
+    total_shares = ShareTransaction.objects.filter(
+        member=request.user
+    ).count()
+
+    total_deposits = DepositRequest.objects.filter(
+        member=request.user,
+        status='APPROVED'
+    ).count()
+
+    active_loans = Loan.objects.filter(
+        member=request.user,
+        status='APPROVED'
+    ).count()
+
+    pending_requests = DepositRequest.objects.filter(
+        member=request.user,
+        status='PENDING'
+    ).count()
+
+    context = {
+        'total_shares': total_shares,
+        'total_deposits': total_deposits,
+        'active_loans': active_loans,
+        'pending_requests': pending_requests,
+    }
+
+    return render(
+        request,
+        'accounts/dashboard.html',
+        context
     )

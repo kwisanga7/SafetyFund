@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Pending Repayments</h2>
+
+<table class="table">
+
+<tr>
+    <th>Member</th>
+    <th>Amount</th>
+    <th>Proof</th>
+    <th>Action</th>
+</tr>
+
+{% for repayment in repayments %}
+
+<tr>
+
+    <td>
+        {{ repayment.loan.member.username }}
+    </td>
+
+    <td>
+        {{ repayment.amount_paid }}
+    </td>
+
+    <td>
+
+        <a href="{{ repayment.payment_proof.url }}"
+           target="_blank">
+
+            View Proof
+
+        </a>
+
+    </td>
+
+    <td>
+
+        <a href="/approve-repayment/{{ repayment.id }}/"
+           class="btn btn-success">
+
+           Approve
+
+        </a>
+
+        <a href="/reject-repayment/{{ repayment.id }}/"
+           class="btn btn-danger">
+
+           Reject
+
+        </a>
+
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+{% endblock %}

@@ -3,6 +3,7 @@ from .models import Loan
 from django.db.models import Sum
 from .models import Loan, ShareTransaction
 from .models import DepositRequest
+from .models import LoanRepayment
 
 
 class LoanRequestForm(forms.ModelForm):
@@ -70,3 +71,25 @@ class DepositRequestForm(forms.ModelForm):
             'amount',
             'payment_proof'
         ]
+
+
+
+class LoanRepaymentForm(forms.ModelForm):
+
+    class Meta:
+        model = LoanRepayment
+
+        fields = [
+            'amount_paid'
+        ]
+
+class MemberRepaymentForm(forms.ModelForm):
+
+    class Meta:
+        model = LoanRepayment
+
+        fields = [
+            'amount_paid',
+            'payment_proof'
+        ]
+
