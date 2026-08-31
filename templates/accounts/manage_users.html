@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">
+    Manage Users
+</h2>
+
+<table class="table table-striped">
+
+    <thead>
+
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Current Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for user in users %}
+
+        <tr>
+
+            <td>{{ user.username }}</td>
+
+            <td>{{ user.email }}</td>
+
+            <td>{{ user.role }}</td>
+
+            <td>
+
+            {% if user.is_active %}
+
+            <span class="badge bg-success">
+             Active
+            </span>
+
+            {% else %}
+
+            <span class="badge bg-danger">
+            Inactive
+             </span>
+
+            {% endif %}
+
+            </td>
+
+            <td>
+
+                <a href="{% url 'change_role' user.id 'USER' %}"
+                   class="btn btn-secondary btn-sm">
+                   User
+                </a>
+
+                <a href="{% url 'change_role' user.id 'MEMBER' %}"
+                   class="btn btn-success btn-sm">
+                   Member
+                </a>
+
+                <a href="{% url 'change_role' user.id 'FINANCE' %}"
+                   class="btn btn-primary btn-sm">
+                   Finance
+                </a>
+
+                <a href="{% url 'change_role' user.id 'ADMINISTRATOR' %}"
+                   class="btn btn-dark btn-sm">
+                   Admin
+                </a>
+
+                <a href="{% url 'toggle_user_status' user.id %}"
+                 class="btn btn-warning btn-sm">
+
+                {% if user.is_active %}
+                Deactivate
+                {% else %}
+                Activate
+                {% endif %}
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

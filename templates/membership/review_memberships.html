@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2 class="mb-4">
+    Review Membership Applications
+</h2>
+
+<table class="table table-bordered">
+
+    <thead>
+
+        <tr>
+            <th>User</th>
+            <th>National ID</th>
+            <th>Phone</th>
+            <th>Occupation</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for application in applications %}
+
+        <tr>
+
+            <td>
+                {{ application.user.username }}
+            </td>
+
+            <td>
+                {{ application.national_id }}
+            </td>
+
+            <td>
+                {{ application.phone_number }}
+            </td>
+
+            <td>
+                {{ application.occupation }}
+            </td>
+
+            <td>
+                {{ application.status }}
+            </td>
+
+            <td>
+
+                <a
+                    href="{% url 'approve_membership' application.id %}"
+                    class="btn btn-success btn-sm">
+
+                    Approve
+
+                </a>
+
+                <a
+                    href="{% url 'reject_membership' application.id %}"
+                    class="btn btn-danger btn-sm">
+
+                    Reject
+
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="6">
+                No pending applications.
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}

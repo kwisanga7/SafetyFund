@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row mb-4">
+
+    <div class="col-md-3">
+
+        <div class="finance-card">
+
+            <h5>Shares</h5>
+
+            <h2>{{ total_shares }}</h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="finance-card">
+
+            <h5>Deposits</h5>
+
+            <h2>{{ total_deposits }}</h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="finance-card">
+
+            <h5>Loans</h5>
+
+            <h2>{{ total_loans }}</h2>
+
+        </div>
+
+    </div>
+
+    <div class="col-md-3">
+
+        <div class="finance-card">
+
+            <h5>Repayments</h5>
+
+            <h2>{{ total_repayments }}</h2>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<h2>
+    Member Profile
+</h2>
+
+<hr>
+
+<div class="card p-3 mb-4">
+
+    <h4>{{ member.username }}</h4>
+
+    <p>
+        <strong>Email:</strong>
+        {{ member.email }}
+    </p>
+
+    <p>
+        <strong>Phone:</strong>
+        {{ member.phone_number }}
+    </p>
+
+    <p>
+        <strong>Role:</strong>
+        {{ member.role }}
+    </p>
+
+</div>
+
+<h4>Shares</h4>
+
+<table class="table">
+
+    <tr>
+        <th>Shares</th>
+        <th>Amount</th>
+        <th>Month</th>
+        <th>Year</th>
+    </tr>
+
+    {% for share in shares %}
+
+    <tr>
+
+        <td>{{ share.shares }}</td>
+
+        <td>{{ share.amount }}</td>
+
+        <td>{{ share.month }}</td>
+
+        <td>{{ share.year }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<h4>Deposits</h4>
+
+<table class="table">
+
+    <tr>
+        <th>Amount</th>
+        <th>Status</th>
+    </tr>
+
+    {% for deposit in deposits %}
+
+    <tr>
+
+        <td>{{ deposit.amount }}</td>
+
+        <td>{{ deposit.status }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+<h4>Loans</h4>
+
+<table class="table">
+
+    <tr>
+        <th>Amount</th>
+        <th>Status</th>
+    </tr>
+
+    {% for loan in loans %}
+
+    <tr>
+
+        <td>{{ loan.amount }}</td>
+
+        <td>{{ loan.status }}</td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+{% endblock %}

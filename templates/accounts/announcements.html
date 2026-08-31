@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">
+        Announcements
+    </h2>
+
+    <div class="row">
+
+        {% for announcement in announcements %}
+
+        <div class="col-md-4">
+
+            <div class="card mb-4 shadow-sm announcement-card">
+
+                {% if announcement.image %}
+                <img
+                    src="{{ announcement.image.url }}"
+                    class="card-img-top">
+                {% endif %}
+
+                <div class="card-body">
+
+                    <h5>
+                        {{ announcement.title }}
+                    </h5>
+
+                    <p>
+                        {{ announcement.description|truncatewords:20 }}
+                    </p>
+
+                    <a
+                       href="{% url 'announcement_detail' announcement.id %}"
+                       class="btn finance-btn">
+
+                       Read More
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

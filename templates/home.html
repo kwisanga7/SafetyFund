@@ -178,4 +178,44 @@
 
 </section>
 
+<h2 class="mb-4">
+    Latest Announcements
+</h2>
+
+<div class="row">
+
+{% for announcement in announcements %}
+
+<div class="col-md-4  home-announcement">
+
+    <div class="card mb-4 announcement-card">
+
+    {% if announcement.image %}
+
+    <img
+        src="{{ announcement.image.url }}"
+        class="card-img-top">
+
+    {% endif %}
+
+    <div class="card-body">
+
+        <h5>{{ announcement.title }}</h5>
+
+        <p>{{ announcement.description|truncatewords:20 }}</p>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endfor %}
+
+</div>
+<a href="{% url 'announcements' %}"
+   class="btn finance-btn">
+    View All Announcements
+</a>
+
 {% endblock %}

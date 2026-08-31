@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from accounts.models import Announcement
 from django.contrib.auth.decorators import login_required
 
 @login_required
@@ -7,8 +7,21 @@ def dashboard(request):
     return render(request, 'accounts/dashboard.html')
 
 
+
+
 def home(request):
-    return render(request, 'home.html')
+
+    announcements = Announcement.objects.order_by(
+        '-created_at'
+    )[:5]
+
+    return render(
+        request,
+        'home.html',
+        {
+            'announcements': announcements
+        }
+    )
 
 
 def about(request):

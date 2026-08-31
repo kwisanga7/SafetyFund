@@ -57,8 +57,8 @@ a {
 .hero-section {
     background: linear-gradient(
         135deg,
-        #033765,
-        #05561d
+        #4b93d2,
+        #49865b
     );
 
     color: white;
@@ -420,4 +420,57 @@ form textarea:focus {
 .finance-btn:hover {
     background-color: #181e5f;
     color: white;
+}
+
+.navbar-brand img {
+    border-radius: 8px;
+}
+
+.navbar-brand {
+    font-size: 1.3rem;
+    font-weight: bold;
+}
+
+.announcement-card {
+    height: 100%;
+}
+
+.announcement-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.announcement-card {
+    height: 100%;
+    min-height: 500px;
+}
+
+.announcement-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.announcement-card .card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.announcement-card .btn {
+    margin-top: auto;
+}
+.announcement-card {
+    height: 100%;
+}
+
+.announcement-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+.home-announcement img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
 }

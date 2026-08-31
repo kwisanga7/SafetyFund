@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<form method="GET" class="mb-4">
+
+    <div class="row">
+
+        <div class="col-md-10">
+
+            <input
+                type="text"
+                name="q"
+                class="form-control"
+                placeholder="Search member..."
+                value="{{ query }}">
+
+        </div>
+
+        <div class="col-md-2">
+
+            <button
+                type="submit"
+                class="btn finance-btn">
+
+                Search
+
+            </button>
+
+        </div>
+
+    </div>
+
+</form>
+
+<h2 class="mb-4">
+    Manage Members
+</h2>
+
+<table class="table table-striped">
+
+    <thead>
+
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for member in members %}
+
+        <tr>
+
+            <td> <a href="{% url 'member_detail' member.id %}">
+
+                 {{ member.username }}
+
+               </a>
+
+            </td>
+
+            <td>{{ member.email }}</td>
+
+            <td>{{ member.phone_number }}</td>
+
+            <td>{{ member.role }}</td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+
+            <td colspan="4">
+                No members found.
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
