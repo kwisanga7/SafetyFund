@@ -15,6 +15,8 @@ from .forms import LoanRepaymentForm
 from .forms import MemberRepaymentForm
 from decimal import Decimal
 from finance.models import (ShareTransaction, Loan, DepositRequest)
+from accounts.models import Announcement
+
 
 User = get_user_model()
 
@@ -592,5 +594,23 @@ def dashboard(request):
     return render(
         request,
         'accounts/dashboard.html',
+        context
+    )
+
+
+
+def home(request):
+
+    latest_announcements = Announcement.objects.order_by(
+        '-created_at'
+    )[:3]
+
+    context = {
+        'latest_announcements': latest_announcements
+    }
+
+    return render(
+        request,
+        'home.html',
         context
     )

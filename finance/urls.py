@@ -105,5 +105,22 @@ path(
     reject_repayment,
     name='reject_repayment'
 ),
+path(
+    'pending-deposits/',
+    pending_deposits,
+    name='pending_deposits'
+),
+
+path(
+    'pending-loans/',
+    pending_loans,
+    name='pending_loans'
+),
+
+path(
+    'pending-repayments/',
+    pending_repayments,
+    name='pending_repayments'
+),
 
 ]

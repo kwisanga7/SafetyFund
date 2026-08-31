@@ -16,7 +16,9 @@ from .views import (
     add_announcement,
     announcements,
     announcement_detail,
-    meet_team
+    meet_team,
+    edit_announcement,
+    delete_announcement
 )
 
 urlpatterns = [
@@ -70,5 +72,16 @@ path(
     'meet-team/',
     meet_team,
     name='meet_team'
+),
+path(
+    'edit-announcement/<int:announcement_id>/',
+    edit_announcement,
+    name='edit_announcement'
+),
+
+path(
+    'delete-announcement/<int:announcement_id>/',
+    delete_announcement,
+    name='delete_announcement'
 ),
 ]

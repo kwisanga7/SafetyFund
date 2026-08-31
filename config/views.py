@@ -9,19 +9,23 @@ def dashboard(request):
 
 
 
+
 def home(request):
 
-    announcements = Announcement.objects.order_by(
+    latest_announcements = Announcement.objects.order_by(
         '-created_at'
-    )[:5]
+    )[:3]
+
+    context = {
+        'latest_announcements': latest_announcements
+    }
 
     return render(
         request,
         'home.html',
-        {
-            'announcements': announcements
-        }
+        context
     )
+
 
 
 def about(request):

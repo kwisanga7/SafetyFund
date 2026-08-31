@@ -27,22 +27,22 @@ a {
 =================================== */
 
 .navbar {
-    background-color: #2E7D32 !important;
+    background-color: #f4f7f4 !important;
 }
 
 .navbar-brand {
     font-size: 1.4rem;
     font-weight: bold;
-    color: white !important;
+    color: rgb(23, 1, 1) !important;
 }
 
 .nav-link {
-    color: white !important;
+    color: rgb(11, 10, 10) !important;
     font-weight: 500;
 }
 
 .nav-link:hover {
-    color: #d4edda !important;
+    color: #079227 !important;
 }
 
 .navbar .btn-light {
@@ -57,8 +57,8 @@ a {
 .hero-section {
     background: linear-gradient(
         135deg,
-        #4b93d2,
-        #49865b
+        #111111,
+        #514f72
     );
 
     color: white;
@@ -226,13 +226,13 @@ a {
 =================================== */
 
 .badge-approved {
-    background-color: #28a745;
+    background-color: #3122a3;
     color: white;
 }
 
 .badge-pending {
-    background-color: #ffc107;
-    color: black;
+    background-color: #3122a3;
+    color: white;
 }
 
 .badge-rejected {
@@ -361,7 +361,7 @@ form textarea:focus {
 
 .dashboard-card {
     background: white;
-    border-left: 5px solid #2E7D32;
+    border-left: 5px solid #545353;
 
     border-radius: 12px;
 
@@ -431,46 +431,177 @@ form textarea:focus {
     font-weight: bold;
 }
 
-.announcement-card {
-    height: 100%;
+.finance-btn {
+    background-color: #2b3b55;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    font-weight: 600;
 }
 
-.announcement-card img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
+.finance-btn:hover {
+    background-color: #2b3b55;
+    color: white;
 }
 
-.announcement-card {
-    height: 100%;
-    min-height: 500px;
+/* ANNOUNCEMENTS */
+
+.page-title {
+    color: #0b2e59;
+    font-weight: 700;
+    margin-bottom: 30px;
 }
 
-.announcement-card img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-}
-
-.announcement-card .card-body {
+.announcement-item {
     display: flex;
-    flex-direction: column;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
-.announcement-card .btn {
+.announcement-image {
+    width: 350px;
+    flex-shrink: 0;
+}
+
+.announcement-image img {
+    width: 100%;
+    height: 250px;
+
+    /*
+    IMPORTANT:
+    Shows entire image
+    without cropping
+    */
+
+    object-fit: contain;
+
+    background: #f8f9fa;
+}
+
+.announcement-content {
+    padding: 25px;
+    flex: 1;
+}
+
+.announcement-date {
+    color: #198754;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.announcement-content h2 {
+    color: #0b2e59;
+    font-weight: 700;
+    margin-bottom: 15px;
+}
+
+.announcement-description {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #555;
+}
+
+.read-more-btn {
+    display: inline-block;
+    margin-top: 15px;
+    background: #198754;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+}
+
+.read-more-btn:hover {
+    background: #198754;
+    color: white;
+}
+
+/* HOME ANNOUNCEMENTS */
+
+.home-announcements {
+    background: #f8fafc;
+}
+
+.section-title {
+    color: #0b2a59;
+    font-weight: 700;
+}
+
+.announcement-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    transition: 0.3s;
+    height: 100%;
+}
+
+.announcement-card:hover {
+    transform: translateY(-5px);
+}
+
+.announcement-image {
+    height: 220px;
+    background: #f1f1f1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px;
+}
+
+.announcement-image img {
+    width: 100%;
+    height: 100%;
+
+    /* Show entire image */
+    object-fit: contain;
+
+    background: white;
+}
+
+/* CARD CONTENT */
+
+.announcement-body {
+    padding: 20px;
+}
+
+.announcement-date {
+    color: #198754;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.announcement-title {
+    color: #0b2a59;
+    font-weight: 700;
+    margin-bottom: 15px;
+
+    min-height: 60px;
+}
+
+.announcement-description {
+    color: #555;
+    line-height: 1.6;
+
+    min-height: 100px;
+}
+
+.announcement-footer {
     margin-top: auto;
 }
-.announcement-card {
-    height: 100%;
+
+.read-more-link {
+    color: #198754;
+    text-decoration: none;
+    font-weight: 600;
 }
 
-.announcement-card img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-}
-.home-announcement img {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
+.read-more-link:hover {
+    color: #146c43;
 }

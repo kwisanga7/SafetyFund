@@ -13,6 +13,7 @@ from .models import User
 from django.shortcuts import get_object_or_404
 from .models import Announcement
 from django.forms import ModelForm
+from accounts.models import Announcement
 
 
 from finance.models import (
@@ -475,3 +476,46 @@ def meet_team(request):
         'meet_team.html'
     )
 
+@login_required
+def edit_announcement(request, announcement_id):
+
+    if request.user.role != 'ADMINISTRATOR':
+        return redirect('announcements')
+
+    announcement = Announcement.objects.get(
+        id=announcement_id
+    )
+
+    if request.method == 'POST':
+
+        announcement.title = request.POST.get('title')
+        announcement.description = request.POST.get('description')
+
+        if request.FILES.get('image'):
+            announcement.image = request.FILES.get('image')
+
+        announcement.save()
+
+        return redirect('announcements')
+
+    return render(
+        request,
+        'accounts/edit_announcement.html',
+        {
+            'announcement': announcement
+        }
+    )
+
+@login_required
+def delete_announcement(request, announcement_id):
+
+    if request.user.role != 'ADMINISTRATOR':
+        return redirect('announcements')
+
+    announcement = Announcement.objects.get(
+        id=announcement_id
+    )
+
+    announcement.delete()
+
+    return redirect('announcements')
