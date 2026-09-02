@@ -20,7 +20,8 @@ from .views import (
     edit_announcement,
     delete_announcement,
     profile,
-    edit_profile
+    edit_profile,
+    developer_dashboard
 )
 
 urlpatterns = [
@@ -105,5 +106,10 @@ path(
         template_name='accounts/change_password.html'
     ),
     name='change_password'
+),
+path(
+    'developer-dashboard/',
+    developer_dashboard,
+    name='developer_dashboard'
 ),
 ]

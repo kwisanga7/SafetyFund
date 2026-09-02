@@ -15,6 +15,8 @@ from .models import Announcement
 from django.forms import ModelForm
 from accounts.models import Announcement
 from .forms import ProfileUpdateForm
+from django.conf import settings
+
 
 
 from finance.models import (
@@ -584,3 +586,47 @@ def edit_profile(request):
         }
     )
 
+
+
+
+@login_required
+def developer_dashboard(request):
+
+    if request.user.role != 'DEVELOPER':
+
+        return render(
+            request,
+            'accounts/access_denied.html'
+        )
+
+    total_users = User.objects.count()
+
+    total_admins = User.objects.filter(
+        role='ADMINISTRATOR'
+    ).count()
+
+    total_finance = User.objects.filter(
+        role='FINANCE'
+    ).count()
+
+    total_members = User.objects.filter(
+        role='MEMBER'
+    ).count()
+
+    context = {
+
+        'total_users': total_users,
+        'total_admins': total_admins,
+        'total_finance': total_finance,
+        'total_members': total_members,
+
+        'debug_mode': settings.DEBUG,
+        'django_version': '6.1',
+
+    }
+
+    return render(
+        request,
+        'accounts/developer_dashboard.html',
+        context
+    )

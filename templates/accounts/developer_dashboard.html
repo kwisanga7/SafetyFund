@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="dashboard-container">
+
+    <h2 class="dashboard-title">
+        Developer Dashboard
+    </h2>
+
+    <p class="dashboard-subtitle">
+        System Management & Monitoring
+    </p>
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+
+            <h5>Total Users</h5>
+
+            <h2>
+                {{ total_users }}
+            </h2>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <h5>Administrators</h5>
+
+            <h2>
+                {{ total_admins }}
+            </h2>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <h5>Finance Officers</h5>
+
+            <h2>
+                {{ total_finance }}
+            </h2>
+
+        </div>
+
+        <div class="dashboard-card">
+
+            <h5>Members</h5>
+
+            <h2>
+                {{ total_members }}
+            </h2>
+
+        </div>
+
+    </div>
+
+    <div class="developer-section">
+
+        <h4>System Information</h4>
+
+        <table class="table table-bordered">
+
+            <tr>
+                <th>Django Version</th>
+                <td>{{ django_version }}</td>
+            </tr>
+
+            <tr>
+                <th>Debug Mode</th>
+                <td>{{ debug_mode }}</td>
+            </tr>
+
+        </table>
+
+    </div>
+
+    <div class="developer-actions">
+
+        <a href="{% url 'manage_users' %}"
+           class="dashboard-btn">
+
+            Manage Users
+
+        </a>
+
+        <a href="{% url 'admin_dashboard' %}"
+           class="dashboard-btn">
+
+            Admin Dashboard
+
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

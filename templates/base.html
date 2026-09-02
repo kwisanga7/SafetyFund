@@ -173,6 +173,19 @@
 
                       </li>
 
+                    {% elif user.role == 'DEVELOPER' %}
+
+<li class="nav-item">
+
+    <a class="nav-link"
+       href="{% url 'developer_dashboard' %}">
+
+        Developer Dashboard
+
+    </a>
+
+</li>
+
                     {% elif user.role == 'FINANCE' %}
                         <li class="nav-item">
                             <a class="nav-link {% if request.path == '/finance-dashboard/' %}active-nav{% endif %}"
