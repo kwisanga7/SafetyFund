@@ -3,6 +3,7 @@ from .forms import MembershipApplicationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import MembershipApplication
+from notifications.models import Notification
 
 
 @login_required
@@ -82,6 +83,12 @@ def approve_membership(request, application_id):
     user.save()
 
     application.save()
+
+    Notification.objects.create(
+    user=application.user,
+    title='Membership Approved',
+    message='Congratulations! Your membership application has been approved.'
+    )
 
     return redirect(
         'review_memberships'

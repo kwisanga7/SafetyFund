@@ -17,6 +17,7 @@ urlpatterns = [
     path('', include('accounts.urls')),
     path('', include('membership.urls')),
     path('', include('finance.urls')),
+    path('', include('notifications.urls')),
 ]
 if settings.DEBUG:
     urlpatterns += static(

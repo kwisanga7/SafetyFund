@@ -16,6 +16,9 @@ from django.forms import ModelForm
 from accounts.models import Announcement
 from .forms import ProfileUpdateForm
 from django.conf import settings
+from membership.models import MembershipApplication
+from finance.models import DepositRequest, Loan
+from notifications.models import Notification
 
 
 
@@ -33,6 +36,18 @@ def register(request):
 
         if form.is_valid():
             user = form.save()
+
+            admins = User.objects.filter(
+               role='ADMINISTRATOR'
+              )
+
+            for admin in admins:
+
+             Notification.objects.create(
+                user=admin,
+                title='New User Registration',
+                message=f'{user.username} has registered.'
+            )
             return redirect('home')
 
     else:
@@ -65,6 +80,8 @@ def login_user(request):
 
             elif user.role == 'FINANCE':
                 return redirect('finance_dashboard')
+            elif user.role == 'DEVELOPER':
+                return redirect('developer_dashboard')
 
             else:
                 return redirect('dashboard')
@@ -424,6 +441,16 @@ def add_announcement(request):
 
             form.save()
 
+            users = User.objects.all()
+
+            for user in users:
+
+             Notification.objects.create(
+                user=user,
+                title='New Announcement',
+                message=f'New announcement: {announcement.title}'
+                )
+
             return redirect(
                 'announcements'
             )
@@ -613,6 +640,14 @@ def developer_dashboard(request):
         role='MEMBER'
     ).count()
 
+    total_announcements = Announcement.objects.count()
+
+    total_membership_requests = MembershipApplication.objects.count()
+
+    total_deposits = DepositRequest.objects.count()
+
+    total_loans = Loan.objects.count()
+
     context = {
 
         'total_users': total_users,
@@ -622,6 +657,10 @@ def developer_dashboard(request):
 
         'debug_mode': settings.DEBUG,
         'django_version': '6.1',
+        'total_announcements': total_announcements,
+        'total_membership_requests': total_membership_requests,
+        'total_deposits': total_deposits,
+        'total_loans': total_loans,
 
     }
 

@@ -2,63 +2,73 @@
 
 {% block content %}
 
-<div class="dashboard-container">
+<div class="developer-dashboard">
 
-    <h2 class="dashboard-title">
-        Developer Dashboard
-    </h2>
+    <div class="dashboard-header">
 
-    <p class="dashboard-subtitle">
-        System Management & Monitoring
-    </p>
+        <h2>
+            Developer Dashboard
+        </h2>
+
+        <p>
+            System Management & Monitoring
+        </p>
+
+    </div>
+
+    <!-- Statistics Cards -->
 
     <div class="dashboard-grid">
 
         <div class="dashboard-card">
-
             <h5>Total Users</h5>
-
-            <h2>
-                {{ total_users }}
-            </h2>
-
+            <h2>{{ total_users }}</h2>
         </div>
 
         <div class="dashboard-card">
-
             <h5>Administrators</h5>
-
-            <h2>
-                {{ total_admins }}
-            </h2>
-
+            <h2>{{ total_admins }}</h2>
         </div>
 
         <div class="dashboard-card">
-
             <h5>Finance Officers</h5>
-
-            <h2>
-                {{ total_finance }}
-            </h2>
-
+            <h2>{{ total_finance }}</h2>
         </div>
 
         <div class="dashboard-card">
-
             <h5>Members</h5>
+            <h2>{{ total_members }}</h2>
+        </div>
 
-            <h2>
-                {{ total_members }}
-            </h2>
+        <div class="dashboard-card">
+            <h5>Announcements</h5>
+            <h2>{{ total_announcements }}</h2>
+        </div>
 
+        <div class="dashboard-card">
+            <h5>Membership Requests</h5>
+            <h2>{{ total_membership_requests }}</h2>
+        </div>
+
+        <div class="dashboard-card">
+            <h5>Deposits</h5>
+            <h2>{{ total_deposits }}</h2>
+        </div>
+
+        <div class="dashboard-card">
+            <h5>Loans</h5>
+            <h2>{{ total_loans }}</h2>
         </div>
 
     </div>
 
-    <div class="developer-section">
+    <!-- System Information -->
 
-        <h4>System Information</h4>
+    <div class="system-information">
+
+        <h4>
+            System Information
+        </h4>
 
         <table class="table table-bordered">
 
@@ -76,6 +86,8 @@
 
     </div>
 
+    <!-- Actions -->
+
     <div class="developer-actions">
 
         <a href="{% url 'manage_users' %}"
@@ -85,10 +97,24 @@
 
         </a>
 
+        <a href="{% url 'manage_announcements' %}"
+           class="dashboard-btn">
+
+            Announcements
+
+        </a>
+
         <a href="{% url 'admin_dashboard' %}"
            class="dashboard-btn">
 
             Admin Dashboard
+
+        </a>
+
+        <a href="/admin/"
+           class="dashboard-btn">
+
+            Django Admin
 
         </a>
 

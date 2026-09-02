@@ -16,7 +16,7 @@ from .forms import MemberRepaymentForm
 from decimal import Decimal
 from finance.models import (ShareTransaction, Loan, DepositRequest)
 from accounts.models import Announcement
-
+from notifications.models import Notification
 
 User = get_user_model()
 
@@ -158,6 +158,12 @@ def approve_loan(request, loan_id):
     loan.status = 'APPROVED'
 
     loan.save()
+
+    Notification.objects.create(
+    user=loan.member,
+    title='Loan Approved',
+    message=f'Your loan request of {loan.amount} RWF has been approved.'
+    )
 
     return redirect(
         'pending_loans'
@@ -317,6 +323,12 @@ def approve_deposit(request, deposit_id):
 
         deposit.status = 'APPROVED'
         deposit.save()
+
+        Notification.objects.create(
+    user=deposit.member,
+    title='Deposit Approved',
+    message=f'Your deposit of {deposit.amount} RWF has been approved.'
+)
 
     return redirect(
         'finance_dashboard'
