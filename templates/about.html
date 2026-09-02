@@ -1,41 +1,60 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<div class="container py-5">
+<section class="about-page">
 
-    <h1 class="mb-4">
-        About SafetyFund
-    </h1>
+    <div class="container">
 
-    <div class="accordion" id="aboutAccordion">
+        <!-- WHO WE ARE -->
+        <div class="about-section about-who">
 
-        <div class="accordion-item">
+            <div class="row align-items-center g-5">
 
-            <h2 class="accordion-header">
+                <div class="col-lg-6">
 
-                <button
-                    class="accordion-button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#aboutSafetyFund">
+                    <div class="about-image-wrapper">
 
-                    About SafetyFund
+                        <img
+                            src="{% static 'images/about-safetyfund.jpeg' %}"
+                            alt="SafetyFund Team"
+                            class="about-image"
+                        >
 
-                </button>
+                    </div>
 
-            </h2>
+                </div>
 
-            <div
-                id="aboutSafetyFund"
-                class="accordion-collapse collapse show">
+                <div class="col-lg-6">
 
-                <div class="accordion-body">
+                    <span class="about-label">
+                        About SafetyFund
+                    </span>
 
-                    SafetyFund is a member-driven
-                    savings and loan management system
-                    designed to help members build
-                    financial security through deposits,
-                    shares and responsible lending.
+                    <h1 class="about-heading">
+                        Who Are We?
+                    </h1>
+
+                    <p class="about-text">
+                        In 2026, safety professionals from Kigali Safety Academy
+                        generated the idea of working together to save for the future.
+                        As the idea continued to grow, more people joined, and that is
+                        how SafetyFund was founded.
+                    </p>
+
+                    <p class="about-text">
+                        The initiative was strongly supported by
+                        <strong>Fredson NIYONIRINGIYE</strong>, CEO of Kigali Safety Academy
+                        and the current Chairperson of SafetyFund.
+                    </p>
+
+                    <p class="about-text">
+                        Together with the team, policies, a clear vision, a mission,
+                        and organizational goals were established. SafetyFund continues
+                        to look forward to growing with more members and creating a
+                        stronger financial future together.
+                    </p>
 
                 </div>
 
@@ -43,46 +62,128 @@
 
         </div>
 
-        <div class="accordion-item">
 
-            <h2 class="accordion-header">
+        <!-- OUR MISSION -->
+        <div class="about-section mission-section">
 
-                <button
-                    class="accordion-button collapsed"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#team">
+            <div class="mission-card">
 
-                    Meet The Team
+                <span class="about-label">
+                    Our Purpose
+                </span>
 
-                </button>
+                <h2 class="about-heading">
+                    Our Mission
+                </h2>
 
-            </h2>
+                <p class="mission-text">
+                    “Our mission is to empower safety professionals to save,
+                    invest, and share responsibly, creating a stronger and more
+                    secure financial future for every member.”
+                </p>
 
-            <div
-                id="team"
-                class="accordion-collapse collapse">
+            </div>
 
-                <div class="accordion-body">
+        </div>
 
-                    <strong>Founder:</strong>
-                    Elie Kwisanga
 
-                    <hr>
+        <!-- OUR OBJECTIVES -->
+        <div class="about-section objectives-section">
 
-                    <strong>Finance Officer</strong>
+            <div class="text-center mb-5">
 
-                    <p>
-                        Responsible for deposits,
-                        shares and loan approvals.
-                    </p>
+                <span class="about-label">
+                    What We Aim To Achieve
+                </span>
 
-                    <strong>System Administrator</strong>
+                <h2 class="about-heading">
+                    Our Objectives
+                </h2>
 
-                    <p>
-                        Responsible for user and
-                        system management.
-                    </p>
+                <p class="about-subtitle">
+                    SafetyFund aims to build a financially responsible,
+                    supportive and sustainable community.
+                </p>
 
+            </div>
+
+
+            <div class="row g-4">
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="objective-card">
+                        <div class="objective-number">01</div>
+                        <h4>Promote Saving</h4>
+                        <p>
+                            Promote a culture of saving among safety professionals.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="objective-card">
+                        <div class="objective-number">02</div>
+                        <h4>Prepare for the Future</h4>
+                        <p>
+                            Help members prepare for the future by turning regular
+                            contributions into meaningful financial resources.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="objective-card">
+                        <div class="objective-number">03</div>
+                        <h4>Collective Investment</h4>
+                        <p>
+                            Create opportunities for collective investment through
+                            the purchase of shares and pooled funds.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="objective-card">
+                        <div class="objective-number">04</div>
+                        <h4>Financial Support</h4>
+                        <p>
+                            Provide responsible access to financial support,
+                            including member loans where applicable.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="objective-card">
+                        <div class="objective-number">05</div>
+                        <h4>Financial Discipline</h4>
+                        <p>
+                            Encourage financial discipline and accountability
+                            through transparent management of members' contributions.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="objective-card">
+                        <div class="objective-number">06</div>
+                        <h4>Strong Community</h4>
+                        <p>
+                            Build a strong community of safety professionals who
+                            support one another financially.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4 mx-auto">
+                    <div class="objective-card">
+                        <div class="objective-number">07</div>
+                        <h4>Long-Term Wealth</h4>
+                        <p>
+                            Create long-term wealth and financial security for
+                            members and their families.
+                        </p>
+                    </div>
                 </div>
 
             </div>
@@ -91,6 +192,6 @@
 
     </div>
 
-</div>
+</section>
 
 {% endblock %}

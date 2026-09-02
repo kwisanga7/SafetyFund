@@ -68,21 +68,59 @@
             <ul class="navbar-nav ms-auto">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
-                </li>
+                    <a class="nav-link {% if request.path == '/' %}active-nav{% endif %}"
+   href="/">
+    Home
+</a>
+<!--                </li>
 
                 <li class="nav-item">
 
        <li class="nav-item dropdown">
 
-    <a class="nav-link dropdown-toggle"
+    <a class="nav-link dropdown-toggle {% if request.path == '/about/' or request.path == '/meet-team/' %}active-nav{% endif %}"
+   href="#"
+   id="aboutDropdown"
+   role="button"
+   data-bs-toggle="dropdown"
+   aria-expanded="false">
+
+        About Us
+
+    </a>
+
+    <ul class="dropdown-menu">
+
+        <li>
+            <a class="dropdown-item"
+               href="{% url 'about' %}">
+                About SafetyFund
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item"
+               href="{% url 'meet_team' %}">
+                Meet The Team
+            </a>
+        </li>
+
+    </ul>
+
+</li>
+
+-->
+
+<li class="nav-item dropdown">
+
+    <a class="nav-link dropdown-toggle {% if request.path == '/about/' or request.path == '/meet-team/' %}active-nav{% endif %}"
        href="#"
        id="aboutDropdown"
        role="button"
        data-bs-toggle="dropdown"
        aria-expanded="false">
 
-        About
+        About Us
 
     </a>
 
@@ -111,11 +149,13 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/contact/">Contact</a>
+                    <a class="nav-link {% if request.path == '/contact/' %}active-nav{% endif %}"
+   href="/contact/">Contact</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'announcements' %}">
+                    <a class="nav-link {% if '/announcement' in request.path or request.path == '/announcements/' %}active-nav{% endif %}"
+   href="{% url 'announcements' %}">
                     Announcements
                     </a>
                 </li>
@@ -126,30 +166,88 @@
                     <li class="nav-item">
                     {% if user.role == 'ADMINISTRATOR' %}
 
-                      <a class="nav-link" href="{% url 'admin_dashboard' %}">Admin Dashboard</a>
+                      <a class="nav-link {% if request.path == '/admin-dashboard/' %}active-nav{% endif %}"
+   href="{% url 'admin_dashboard' %}">
+    Admin Dashboard
+</a>
 
                       </li>
 
                     {% elif user.role == 'FINANCE' %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/finance-dashboard/">
+                            <a class="nav-link {% if request.path == '/finance-dashboard/' %}active-nav{% endif %}"
+   href="/finance-dashboard/">
+  
                                 Finance Dashboard
                             </a>
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="/dashboard/">
+                            <a class="nav-link {% if request.path == '/dashboard/' %}active-nav{% endif %}"
+   href="/dashboard/">
+   
                                 Dashboard
                             </a>
                         </li>
                     {% endif %}
 
+                    <li class="nav-item dropdown">
 
-                    <li class="nav-item">
-                        <span class="nav-link">
-                            Welcome {{ user.username }}
-                        </span>
-                    </li>
+    <a class="nav-link dropdown-toggle d-flex align-items-center"
+       href="#"
+       data-bs-toggle="dropdown">
+
+        {% if user.profile_picture %}
+
+            <img
+                src="{{ user.profile_picture.url }}"
+                class="navbar-profile-photo">
+
+        {% else %}
+
+            <div class="navbar-avatar">
+                {{ user.username|first|upper }}
+            </div>
+
+        {% endif %}
+
+        <span class="ms-2">
+            {{ user.username }}
+        </span>
+
+    </a>
+
+    <ul class="dropdown-menu dropdown-menu-end">
+
+        <li>
+            <a class="dropdown-item"
+               href="{% url 'profile' %}">
+                My Profile
+            </a>
+        </li>
+
+        <li>
+            <a class="dropdown-item"
+               href="/logout/">
+                Logout
+            </a>
+        </li>
+
+    </ul>
+
+</li>
+
+                   <!-- <li class="nav-item">
+
+    <a
+        class="nav-link {% if request.path == '/profile/' %}active-nav{% endif %}"
+        href="{% url 'profile' %}">
+
+        Profile
+
+    </a>
+
+</li>
 
                     <li class="nav-item">
                         <a class="btn btn-light btn-sm mt-1 ms-2"
@@ -158,10 +256,14 @@
                         </a>
                     </li>
 
+                    -->
+
                 {% else %}
 
                     <li class="nav-item">
-                        <a class="nav-link" href="/register/">
+                        
+                             <a class="nav-link {% if request.path == '/register/' %}active-nav{% endif %}"
+   href="/register/">
                             Register
                         </a>
                     </li>
@@ -182,6 +284,52 @@
     </div>
 
 </nav>
+
+<!--
+{% if user.is_authenticated %}
+
+    {% if user.role == 'MEMBER' or user.role == 'FINANCE' or user.role == 'ADMINISTRATOR' %}
+
+    <div class="user-banner">
+
+        <a href="{% url 'profile' %}" class="user-profile-link">
+
+            {% if user.profile_picture %}
+
+                <img
+                    src="{{ user.profile_picture.url }}"
+                    alt="{{ user.username }}"
+                    class="user-profile-photo">
+
+            {% else %}
+
+                <div class="user-avatar">
+                    {{ user.username|first|upper }}
+                </div>
+
+            {% endif %}
+
+            <div class="user-details">
+
+                <h5>
+                    {{ user.username }}
+                </h5>
+
+                <p>
+                    {{ user.get_role_display }}
+                </p>
+
+            </div>
+
+        </a>
+
+    </div>
+
+    {% endif %}
+
+{% endif %}
+
+-->
 
 
 <!-- Content -->

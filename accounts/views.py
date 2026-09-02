@@ -14,6 +14,7 @@ from django.shortcuts import get_object_or_404
 from .models import Announcement
 from django.forms import ModelForm
 from accounts.models import Announcement
+from .forms import ProfileUpdateForm
 
 
 from finance.models import (
@@ -422,7 +423,7 @@ def add_announcement(request):
             form.save()
 
             return redirect(
-                'manage_announcements'
+                'announcements'
             )
 
     else:
@@ -519,3 +520,67 @@ def delete_announcement(request, announcement_id):
     announcement.delete()
 
     return redirect('announcements')
+
+@login_required
+def apply_membership(request):
+
+    if request.user.role != 'USER':
+        return redirect('dashboard')
+
+    # existing code
+
+@login_required
+def profile(request):
+
+    total_savings = DepositRequest.objects.filter(
+        member=request.user,
+        status='APPROVED'
+    ).count()
+
+    active_loans = Loan.objects.filter(
+        member=request.user,
+        status='APPROVED'
+    ).count()
+
+    context = {
+        'total_savings': total_savings,
+        'active_loans': active_loans,
+    }
+
+    return render(
+        request,
+        'accounts/profile.html',
+        context
+    )
+
+@login_required
+def edit_profile(request):
+
+    if request.method == 'POST':
+
+        form = ProfileUpdateForm(
+            request.POST,
+            request.FILES,
+            instance=request.user
+        )
+
+        if form.is_valid():
+
+            form.save()
+
+            return redirect('profile')
+
+    else:
+
+        form = ProfileUpdateForm(
+            instance=request.user
+        )
+
+    return render(
+        request,
+        'accounts/edit_profile.html',
+        {
+            'form': form
+        }
+    )
+

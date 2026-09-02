@@ -8,25 +8,48 @@ from .models import MembershipApplication
 @login_required
 def apply_membership(request):
 
+    if request.user.role != 'USER':
+        return redirect('dashboard')
+
+    existing_application = MembershipApplication.objects.filter(
+        user=request.user,
+        status='PENDING'
+    ).exists()
+
+    if existing_application:
+        return redirect('dashboard')
+
     if request.method == 'POST':
 
-        form = MembershipApplicationForm(request.POST)
+        form = MembershipApplicationForm(
+            request.POST,
+            request.FILES
+        )
 
         if form.is_valid():
 
-            application = form.save(commit=False)
+            application = form.save(
+                commit=False
+            )
+
             application.user = request.user
+
             application.save()
 
-            return redirect('dashboard')
+            return redirect(
+                'dashboard'
+            )
 
     else:
+
         form = MembershipApplicationForm()
 
     return render(
         request,
         'membership/apply_membership.html',
-        {'form': form}
+        {
+            'form': form
+        }
     )
 
 @login_required

@@ -12,4 +12,5 @@ class MembershipApplicationForm(forms.ModelForm):
             'phone_number',
             'address',
             'occupation',
+            'payment_proof',
         ]

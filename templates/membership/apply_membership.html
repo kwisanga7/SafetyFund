@@ -2,20 +2,41 @@
 
 {% block content %}
 
-<h2>Membership Application</h2>
+<div class="form-card">
 
-<form method="POST">
+    <h2>
+        Membership Application
+    </h2>
 
-    {% csrf_token %}
+    <div class="alert alert-info">
 
-    {{ form.as_p }}
+        Membership Fee:
+        <strong>5,000 RWF</strong>
 
-    <button
-        type="submit"
-        class="btn btn-primary">
-        Submit Application
-    </button>
+        <br>
 
-</form>
+        Please upload proof of payment before
+        submitting your application.
+
+    </div>
+
+    <form
+        method="POST"
+        enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button
+            class="btn btn-primary">
+
+            Submit Application
+
+        </button>
+
+    </form>
+
+</div>
 
 {% endblock %}

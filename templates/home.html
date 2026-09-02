@@ -8,19 +8,32 @@
 {% block content %}
 
 <!-- Hero Section -->
+ 
 <section class="hero-section">
 
     <div class="container text-center">
 
-        <h1 class="display-3 fw-bold">
-            Welcome to SafetyFund
-        </h1>
+        <h1 class="hero-title">
+
+    <span class="welcome-text">
+        Welcome to
+    </span>
+
+    <span class="brand-text">
+        SafetyFund,
+    </span>
+
+    <span class="slogan-text">
+        Building Financial Security Together
+    </span>
+
+</h1>
 
         <p class="lead mt-3">
 
-            A modern savings and loan platform designed
-            to help members save, invest in shares,
-            access loans and build financial security.
+            SafetyFund empowers safety professionals to save,
+            invest, and grow through collective financial
+            responsibility and support.
 
         </p>
 
@@ -33,10 +46,10 @@
 
             </a>
 
-            <a href="/login/"
+            <a href="{% url 'about' %}"
                class="btn btn-outline-light btn-lg mt-3">
 
-                Login
+                Learn More
 
             </a>
 
@@ -181,7 +194,7 @@
 
     </div>
 
-<p>Announcements Found: {{ latest_announcements|length }}</p>
+
 
 <section class="home-announcements py-5">
 
@@ -260,5 +273,79 @@
     </div>
 
 </section>
+
+<section class="home-about-section">
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-6">
+
+                <img src="{% static 'images/about-safetyfund.jpeg' %}"
+                     alt="SafetyFund"
+                     class="home-about-image">
+
+            </div>
+
+            <div class="col-lg-6">
+
+                <span class="section-tag">
+                    About SafetyFund
+                </span>
+
+                <h2>
+                    Building Financial Security Together
+                </h2>
+
+                <p>
+                    SafetyFund was founded in 2026 by safety professionals
+                    from Kigali Safety Academy with a vision of creating a
+                    strong financial support system through savings,
+                    investments, shares, and responsible lending.
+                </p>
+
+                <p>
+                    Led by Fredson NIYONIRINGIYE and a dedicated team,
+                    SafetyFund continues to empower members to prepare
+                    for a secure financial future.
+                </p>
+
+                <a href="{% url 'about' %}"
+                   class="btn btn-success">
+                    Learn More
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+<div class="row text-center mt-5">
+
+    <div class="col-md-3">
+        <h2>100+</h2>
+        <p>Members</p>
+    </div>
+
+    <div class="col-md-3">
+        <h2>50M+</h2>
+        <p>Savings</p>
+    </div>
+
+    <div class="col-md-3">
+        <h2>20+</h2>
+        <p>Loans Issued</p>
+    </div>
+
+    <div class="col-md-3">
+        <h2>2026</h2>
+        <p>Founded</p>
+    </div>
+
+</div>
 
 {% endblock %}

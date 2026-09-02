@@ -71,29 +71,33 @@
 <div class="row mb-4">
 
     <div class="col-md-3">
-        <a href="/apply-membership/"
-           class="btn btn-success w-100">
-            Membership
-        </a>
+        {% if user.role != 'MEMBER' %}
+
+           <a href="{% url 'apply_membership' %}"
+            class="dashboard-btn">
+              Apply Membership
+           </a>
+
+       {% endif %}
     </div>
 
     <div class="col-md-3">
         <a href="/make-deposit/"
-           class="btn btn-primary w-100">
+           class="dashboard-btn">
             Deposit
         </a>
     </div>
 
     <div class="col-md-3">
         <a href="/request-loan/"
-           class="btn btn-warning w-100">
+           class="dashboard-btn">
             Loan Request
         </a>
     </div>
 
     <div class="col-md-3">
         <a href="/my-loans/"
-           class="btn btn-dark w-100">
+           class="dashboard-btn">
             My Loans
         </a>
     </div>

@@ -16,6 +16,7 @@
             <th>Phone</th>
             <th>Occupation</th>
             <th>Status</th>
+            <th>Payment Proof</th>
             <th>Action</th>
         </tr>
 
@@ -46,6 +47,58 @@
             <td>
                 {{ application.status }}
             </td>
+<!--
+            <td>
+
+{% if application.payment_proof %}
+
+    <a href="{{ application.payment_proof.url }}"
+       target="_blank">
+
+        View Proof
+
+    </a>
+
+{% else %}
+
+    No File
+
+{% endif %}
+
+</td>
+
+
+
+<td>
+
+    {% if application.payment_proof %}
+
+        <a href="{{ application.payment_proof.url }}"
+           target="_blank"
+           class="btn btn-sm btn-success">
+
+            Open Proof
+
+        </a>
+
+    {% else %}
+
+        No Proof
+
+    {% endif %}
+
+</td>
+-->
+
+<td>
+    <a href="{{ application.payment_proof.url }}"
+       target="_blank"
+       class="proof-btn">
+
+        View Receipt
+
+    </a>
+</td>
 
             <td>
 

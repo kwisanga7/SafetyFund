@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="profile-page">
+
+    <div class="profile-card">
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+
+            {% if user.profile_picture %}
+
+                <img
+                    src="{{ user.profile_picture.url }}"
+                    alt="{{ user.username }}"
+                    class="profile-picture">
+
+            {% else %}
+
+                <div class="profile-placeholder">
+                    {{ user.username|first|upper }}
+                </div>
+
+            {% endif %}
+
+            <div>
+
+                <h2>
+                    {{ user.first_name }}
+                    {{ user.last_name }}
+                </h2>
+
+                <p class="profile-username">
+                    @{{ user.username }}
+                </p>
+
+                <span class="profile-role">
+                    {{ user.get_role_display }}
+                </span>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <!-- Financial Summary -->
+        <div class="financial-summary">
+
+            <h4 class="section-title">
+                Financial Summary
+            </h4>
+
+            <div class="summary-grid">
+
+                <div class="summary-card">
+
+                    <h5>Total Savings</h5>
+
+                    <p>
+                        {{ total_savings|default:"0" }} RWF
+                    </p>
+
+                </div>
+
+                <div class="summary-card">
+
+                    <h5>Shares Owned</h5>
+
+                    <p>
+                        {{ total_shares|default:"0" }}
+                    </p>
+
+                </div>
+
+                <div class="summary-card">
+
+                    <h5>Active Loans</h5>
+
+                    <p>
+                        {{ active_loans|default:"0" }}
+                    </p>
+
+                </div>
+
+                <div class="summary-card">
+
+                    <h5>Member Number</h5>
+
+                    <p>
+                        {{ member_number|default:"N/A" }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <!-- Personal Information -->
+        <div class="profile-information">
+
+            <h4 class="section-title">
+                Personal Information
+            </h4>
+
+            <div class="info-grid">
+
+                <div class="info-card">
+
+                    <span>Email</span>
+
+                    <strong>
+                        {{ user.email|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+                <div class="info-card">
+
+                    <span>Phone Number</span>
+
+                    <strong>
+                        {{ user.phone_number|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+                <div class="info-card">
+
+                    <span>Address</span>
+
+                    <strong>
+                        {{ user.address|default:"Not provided" }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <hr>
+
+        <!-- Bio -->
+        <div class="profile-bio">
+
+            <h4 class="section-title">
+                About Me
+            </h4>
+
+            <p>
+
+                {{ user.bio|default:"No profile description added yet." }}
+
+            </p>
+
+        </div>
+
+        <hr>
+
+        <!-- Recent Activity -->
+        <div class="activity-section">
+
+            <h4 class="section-title">
+                Recent Activity
+            </h4>
+
+            <ul class="activity-list">
+
+                {% for activity in activities %}
+
+                    <li>
+                        {{ activity }}
+                    </li>
+
+                {% empty %}
+
+                    <li>
+                        No recent activity available.
+                    </li>
+
+                {% endfor %}
+
+            </ul>
+
+        </div>
+
+        <hr>
+
+        <!-- Action Buttons -->
+        <div class="profile-actions">
+
+            <a href="{% url 'edit_profile' %}"
+               class="dashboard-btn">
+
+                Edit Profile
+
+            </a>
+
+            <a href="{% url 'change_password' %}"
+               class="dashboard-btn">
+
+                Change Password
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

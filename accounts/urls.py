@@ -1,5 +1,5 @@
 from django.urls import path
-
+from django.contrib.auth.views import PasswordChangeView
 
 from .views import (
     register,
@@ -18,7 +18,9 @@ from .views import (
     announcement_detail,
     meet_team,
     edit_announcement,
-    delete_announcement
+    delete_announcement,
+    profile,
+    edit_profile
 )
 
 urlpatterns = [
@@ -83,5 +85,25 @@ path(
     'delete-announcement/<int:announcement_id>/',
     delete_announcement,
     name='delete_announcement'
+),
+path(
+    'profile/',
+    profile,
+    name='profile'
+),
+
+path(
+    'profile/edit/',
+    edit_profile,
+    name='edit_profile'
+),
+
+
+path(
+    'change-password/',
+    PasswordChangeView.as_view(
+        template_name='accounts/change_password.html'
+    ),
+    name='change_password'
 ),
 ]

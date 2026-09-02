@@ -1,7 +1,7 @@
-from django.utils import timezone
-from datetime import datetime
 from django.db import models
 from django.conf import settings
+from django.utils import timezone
+from datetime import datetime
 
 
 class MembershipApplication(models.Model):
@@ -17,13 +17,28 @@ class MembershipApplication(models.Model):
         on_delete=models.CASCADE
     )
 
-    national_id = models.CharField(max_length=20)
+    national_id = models.CharField(
+        max_length=20
+    )
 
-    phone_number = models.CharField(max_length=20)
+    phone_number = models.CharField(
+        max_length=20
+    )
 
-    address = models.CharField(max_length=255)
+    address = models.CharField(
+        max_length=255
+    )
 
-    occupation = models.CharField(max_length=100)
+    occupation = models.CharField(
+        max_length=100
+    )
+
+    # Membership Fee Payment Proof
+    payment_proof = models.FileField(
+        upload_to='membership_proofs/',
+        null=True,
+        blank=True
+    )
 
     status = models.CharField(
         max_length=20,
@@ -31,75 +46,52 @@ class MembershipApplication(models.Model):
         default='PENDING'
     )
 
-    applied_at = models.DateTimeField(auto_now_add=True)
+    member_number = models.CharField(
+        max_length=20,
+        unique=True,
+        null=True,
+        blank=True
+    )
+
+    applied_at = models.DateTimeField(
+        auto_now_add=True
+    )
 
     reviewed_at = models.DateTimeField(
         null=True,
         blank=True
     )
 
-    def __str__(self):
-        return f"{self.user.username} - {self.status}"
-
-    member_number = models.CharField(
-    max_length=20,
-    unique=True,
-    null=True,
-    blank=True
-    )
-
     approved_date = models.DateTimeField(
-    null=True,
-    blank=True
-    )
-
-    status = models.CharField(
-    max_length=20,
-    choices=STATUS_CHOICES,
-    default='PENDING'
-    )
-
-    member_number = models.CharField(
-    max_length=20,
-    unique=True,
-    null=True,
-    blank=True
-    )
-
-    approved_date = models.DateTimeField(
-    null=True,
-    blank=True
-    )
-
-    applied_at = models.DateTimeField(auto_now_add=True)
-
-    reviewed_at = models.DateTimeField(
-    null=True,
-    blank=True
+        null=True,
+        blank=True
     )
 
     def save(self, *args, **kwargs):
 
-     if self.status == 'APPROVED':
+        if self.status == 'APPROVED':
 
-        if not self.member_number:
+            if not self.member_number:
 
-            year = datetime.now().year
+                year = datetime.now().year
 
-            last_member = MembershipApplication.objects.filter(
-                member_number__isnull=False
-            ).count()
+                last_member = MembershipApplication.objects.filter(
+                    member_number__isnull=False
+                ).count()
 
-            next_number = last_member + 1
+                next_number = last_member + 1
 
-            self.member_number = (
-                f"SF{year}{next_number:03d}"
-            )
+                self.member_number = (
+                    f"SF{year}{next_number:03d}"
+                )
 
-        if not self.approved_date:
-            self.approved_date = timezone.now()
+            if not self.approved_date:
+                self.approved_date = timezone.now()
 
-        self.user.role = 'MEMBER'
-        self.user.save()
+            self.user.role = 'MEMBER'
+            self.user.save()
 
-     super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.status}"
