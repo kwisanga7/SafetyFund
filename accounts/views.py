@@ -19,7 +19,23 @@ from django.conf import settings
 from membership.models import MembershipApplication
 from finance.models import DepositRequest, Loan
 from notifications.models import Notification
+from activitylogs.models import ActivityLog
+from django.shortcuts import render, redirect
+from .models import SiteSetting
+from django.contrib.auth.decorators import login_required
+from membership.models import MembershipApplication
 
+from django.http import HttpResponse
+from reportlab.pdfgen import canvas
+from membership.models import MembershipApplication
+
+from django.http import HttpResponse
+from django.template.loader import get_template
+from django.conf import settings
+from django.contrib.staticfiles import finders
+from membership.models import MembershipApplication
+from xhtml2pdf import pisa
+import os
 
 
 from finance.models import (
@@ -36,6 +52,13 @@ def register(request):
 
         if form.is_valid():
             user = form.save()
+
+            
+
+            ActivityLog.objects.create(
+            user=user,
+            action='Registered a new account'
+           )
 
             admins = User.objects.filter(
                role='ADMINISTRATOR'
@@ -669,3 +692,214 @@ def developer_dashboard(request):
         'accounts/developer_dashboard.html',
         context
     )
+
+
+
+@login_required
+def site_settings(request):
+
+    setting = SiteSetting.objects.first()
+
+    if request.method == 'POST':
+
+        setting.site_name = request.POST.get(
+            'site_name'
+        )
+
+        setting.site_slogan = request.POST.get(
+            'site_slogan'
+        )
+
+        setting.organization_name = request.POST.get(
+            'organization_name'
+        )
+
+        setting.email = request.POST.get(
+            'email'
+        )
+
+        setting.phone = request.POST.get(
+            'phone'
+        )
+
+        setting.address = request.POST.get(
+            'address'
+        )
+
+        setting.footer_text = request.POST.get(
+            'footer_text'
+        )
+
+        setting.save()
+
+        return redirect(
+            'site_settings'
+        )
+
+    return render(
+        request,
+        'accounts/site_settings.html',
+        {
+            'setting': setting
+        }
+    )
+
+
+
+
+
+@login_required
+def member_id_card(request):
+
+    membership = MembershipApplication.objects.filter(
+        user=request.user,
+        status='APPROVED'
+    ).first()
+
+    print("MEMBERSHIP:", membership)
+
+    if membership:
+        print("QR:", membership.qr_code)
+
+    return render(
+        request,
+        'accounts/member_id_card.html',
+        {
+            'membership': membership
+        }
+    )
+
+
+@login_required
+def download_member_card(request):
+
+    membership = MembershipApplication.objects.filter(
+        user=request.user,
+        status='APPROVED'
+    ).first()
+
+    response = HttpResponse(
+        content_type='application/pdf'
+    )
+
+    response[
+        'Content-Disposition'
+    ] = 'attachment; filename="SafetyFund_ID_Card.pdf"'
+
+    p = canvas.Canvas(response)
+
+    p.setFont("Helvetica-Bold", 18)
+    p.drawString(
+        100,
+        780,
+        "SafetyFund Membership Card"
+    )
+
+    p.setFont("Helvetica", 12)
+
+    p.drawString(
+        100,
+        730,
+        f"Name: {request.user.get_full_name()}"
+    )
+
+    p.drawString(
+        100,
+        710,
+        f"Username: {request.user.username}"
+    )
+
+    p.drawString(
+        100,
+        690,
+        f"Member Number: {membership.member_number}"
+    )
+
+    p.drawString(
+        100,
+        670,
+        f"Role: {request.user.get_role_display()}"
+    )
+
+    p.drawString(
+        100,
+        650,
+        f"Joined: {membership.approved_date.strftime('%d-%m-%Y')}"
+    )
+
+    p.save()
+
+    return response
+
+
+
+
+def link_callback(uri, rel):
+
+    # Media files
+    if uri.startswith(settings.MEDIA_URL):
+
+        path = os.path.join(
+            settings.MEDIA_ROOT,
+            uri.replace(settings.MEDIA_URL, '')
+        )
+
+        return path
+
+    # Static files
+    if uri.startswith(settings.STATIC_URL):
+
+        relative_path = uri.replace(
+            settings.STATIC_URL,
+            ''
+        )
+
+        path = finders.find(relative_path)
+
+        if path:
+            return path
+
+    return uri
+
+@login_required
+def download_member_card(request):
+
+    membership = get_object_or_404(
+        MembershipApplication,
+        user=request.user,
+        status='APPROVED'
+    )
+
+    # Only approved members should download a card
+    if request.user.role != 'MEMBER':
+        return redirect('profile')
+
+    template = get_template(
+        'accounts/member_card_pdf.html'
+    )
+
+    html = template.render({
+        'user': request.user,
+        'membership': membership,
+    })
+
+    response = HttpResponse(
+        content_type='application/pdf'
+    )
+
+    response['Content-Disposition'] = (
+        f'attachment; filename="SafetyFund_{membership.member_number}.pdf"'
+    )
+
+    pisa_status = pisa.CreatePDF(
+        html,
+        dest=response,
+        link_callback=link_callback
+    )
+
+    if pisa_status.err:
+        return HttpResponse(
+            'An error occurred while generating the PDF.'
+        )
+
+    return response

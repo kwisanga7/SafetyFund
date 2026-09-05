@@ -4,6 +4,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import MembershipApplication
 from notifications.models import Notification
+from activitylogs.models import ActivityLog
+from django.shortcuts import render, get_object_or_404
+from .models import MembershipApplication
 
 
 @login_required
@@ -36,6 +39,23 @@ def apply_membership(request):
             application.user = request.user
 
             application.save()
+
+            ActivityLog.objects.create(
+            user=request.user,
+    action='Submitted membership application'
+)
+
+            admins = User.objects.filter(
+              role='ADMINISTRATOR'
+              )
+
+            for admin in admins:
+
+             Notification.objects.create(
+             user=admin,
+                title='New Membership Application',
+                message=f'{request.user.username} submitted a membership application.'
+             )
 
             return redirect(
                 'dashboard'
@@ -84,6 +104,11 @@ def approve_membership(request, application_id):
 
     application.save()
 
+    ActivityLog.objects.create(
+    user=request.user,
+    action=f'Approved membership for {application.user.username}'
+    )
+
     Notification.objects.create(
     user=application.user,
     title='Membership Approved',
@@ -107,4 +132,23 @@ def reject_membership(request, application_id):
 
     return redirect(
         'review_memberships'
+    )
+
+
+
+
+def verify_member(request, member_number):
+
+    membership = get_object_or_404(
+        MembershipApplication,
+        member_number=member_number,
+        status='APPROVED'
+    )
+
+    return render(
+        request,
+        'membership/verify_member.html',
+        {
+            'membership': membership
+        }
     )

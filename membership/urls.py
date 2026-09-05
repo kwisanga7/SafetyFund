@@ -5,6 +5,7 @@ from .views import (
     review_memberships,
     approve_membership,
     reject_membership,
+    verify_member,
 )
 
 urlpatterns = [
@@ -32,4 +33,9 @@ urlpatterns = [
         reject_membership,
         name='reject_membership'
     ),
+    path(
+    'verify-member/<str:member_number>/',
+    verify_member,
+    name='verify_member'
+),
 ]

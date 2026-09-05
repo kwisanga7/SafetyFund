@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.forms import ModelForm
 
+
 class User(AbstractUser):
 
     ROLE_CHOICES = (
@@ -70,3 +71,42 @@ class Announcement(models.Model):
     def __str__(self):
         return self.title
 
+
+
+
+class SiteSetting(models.Model):
+
+    site_name = models.CharField(
+        max_length=100,
+        default='SafetyFund'
+    )
+
+    site_slogan = models.CharField(
+        max_length=255,
+        blank=True
+    )
+
+    organization_name = models.CharField(
+        max_length=255,
+        blank=True
+    )
+
+    email = models.EmailField(
+        blank=True
+    )
+
+    phone = models.CharField(
+        max_length=50,
+        blank=True
+    )
+
+    address = models.TextField(
+        blank=True
+    )
+
+    footer_text = models.TextField(
+        blank=True
+    )
+
+    def __str__(self):
+        return self.site_name

@@ -17,7 +17,7 @@ from decimal import Decimal
 from finance.models import (ShareTransaction, Loan, DepositRequest)
 from accounts.models import Announcement
 from notifications.models import Notification
-
+from activitylogs.models import ActivityLog
 User = get_user_model()
 
 
@@ -38,6 +38,23 @@ def request_loan(request):
             loan.status = 'PENDING'
 
             loan.save()
+
+            ActivityLog.objects.create(
+    user=request.user,
+    action='Submitted loan request'
+)
+
+            finance_users = User.objects.filter(
+            role='FINANCE'
+            )
+
+            for finance in finance_users:
+
+              Notification.objects.create(
+                    user=finance,
+                    title='New Loan Request',
+                    message=f'{request.user.username} submitted a loan request.'
+            )
 
             return redirect('dashboard')
 
@@ -278,6 +295,11 @@ def deposit_request(request):
             deposit.member = request.user
 
             deposit.save()
+
+            ActivityLog.objects.create(
+             user=request.user,
+             action='Submitted deposit request'
+            )
 
             return redirect(
                 'dashboard'

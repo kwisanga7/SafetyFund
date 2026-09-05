@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<div class="id-card-container" id="memberCard">
+
+    <div class="member-id-card">
+
+        <div class="card-header">
+
+            <h3>SAFETYFUND</h3>
+
+            <p>Official Membership Card</p>
+
+        </div>
+
+        <div class="card-body">
+
+            {% if user.profile_picture %}
+
+                <img
+                    src="{{ user.profile_picture.url }}"
+                    class="member-photo">
+
+            {% else %}
+
+                <div class="member-photo-placeholder">
+                    {{ user.username|first|upper }}
+                </div>
+
+            {% endif %}
+
+            <h4>
+                {{ user.first_name }}
+                {{ user.last_name }}
+            </h4>
+
+            <p>
+                <strong>Member No:</strong>
+                {{ membership.member_number }}
+            </p>
+
+            <p>
+                <strong>Role:</strong>
+                {{ user.get_role_display }}
+            </p>
+
+            <p>
+                <strong>Joined:</strong>
+                {{ membership.approved_date|date:"d M Y" }}
+            </p>
+
+            <p class="status-active">
+                ACTIVE MEMBER
+            </p>
+
+           {% if membership.qr_code %}
+
+<div class="member-qr">
+
+    <img
+        src="{{ membership.qr_code.url }}"
+        alt="Member QR Code"
+        width="150">
+
+</div>
+
+{% else %}
+
+<p>No QR Code Found</p>
+
+{% endif %}
+
+         
+
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="member-card-actions">
+
+    <a
+        href="{% url 'download_member_card' %}"
+        class="dashboard-btn">
+
+        Download PDF
+
+    </a>
+
+    <button
+        onclick="window.print()"
+        class="dashboard-btn">
+
+        Print Card
+
+    </button>
+
+    <button
+        onclick="downloadCard()"
+        class="dashboard-btn">
+
+        Download PNG
+
+    </button>
+
+    <script>
+
+function downloadCard() {
+
+    const card =
+        document.getElementById(
+            'memberCard'
+        );
+
+    html2canvas(card, {
+
+        scale: 3,
+
+        useCORS: true
+
+    }).then(canvas => {
+
+        const link =
+            document.createElement('a');
+
+        link.download =
+            'SafetyFund_ID_Card.png';
+
+        link.href =
+            canvas.toDataURL(
+                'image/png'
+            );
+
+        link.click();
+
+    });
+
+}
+
+</script>
+
+</div>
+
+{% endblock %}

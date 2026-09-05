@@ -1,0 +1,237 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <style>
+
+        @page {
+            size: A4;
+            margin: 25mm;
+        }
+
+        body {
+            font-family: Helvetica, Arial, sans-serif;
+            color: #222;
+        }
+
+        .page-title {
+            text-align: center;
+            color: #0d3b66;
+            margin-bottom: 30px;
+        }
+
+        .member-card {
+            width: 360px;
+            margin: 0 auto;
+            border: 1px solid #d9d9d9;
+            border-radius: 12px;
+            background: #ffffff;
+            overflow: hidden;
+        }
+
+        .card-top {
+            background: #0d3b66;
+            color: white;
+            text-align: center;
+            padding: 18px;
+        }
+
+        .logo {
+            width: 55px;
+            height: 55px;
+            margin-bottom: 6px;
+        }
+
+        .card-top h2 {
+            margin: 4px 0;
+            font-size: 22px;
+        }
+
+        .card-top p {
+            margin: 0;
+            font-size: 11px;
+        }
+
+        .card-content {
+            padding: 22px;
+            text-align: center;
+        }
+
+        .profile-photo {
+            width: 95px;
+            height: 95px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .member-name {
+            font-size: 19px;
+            color: #0d3b66;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        .member-number {
+            color: #198754;
+            font-weight: bold;
+            margin-bottom: 16px;
+        }
+
+        .details {
+            text-align: left;
+            margin-top: 18px;
+        }
+
+        .details p {
+            margin: 6px 0;
+            font-size: 12px;
+        }
+
+        .qr-code {
+            width: 105px;
+            height: 105px;
+            margin-top: 15px;
+        }
+
+        .verify-text {
+            font-size: 10px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .active-status {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .card-footer {
+            background: #f5f7fa;
+            text-align: center;
+            font-size: 9px;
+            padding: 10px;
+            color: #666;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h2 class="page-title">
+    SafetyFund Membership Card
+</h2>
+
+<div class="member-card">
+
+    <!-- CARD HEADER -->
+
+    <div class="card-top">
+
+        <img
+            src="{% static 'images/logo.png' %}"
+            class="logo">
+
+        <h2>
+            SAFETYFUND
+        </h2>
+
+        <p>
+            Official Membership Card
+        </p>
+
+    </div>
+
+
+    <!-- CARD BODY -->
+
+    <div class="card-content">
+
+        {% if user.profile_picture %}
+
+            <img
+                src="{{ user.profile_picture.url }}"
+                class="profile-photo">
+
+        {% endif %}
+
+
+        <h3 class="member-name">
+
+            {{ user.first_name }}
+            {{ user.last_name }}
+
+        </h3>
+
+
+        <div class="member-number">
+
+            {{ membership.member_number }}
+
+        </div>
+
+
+        <div class="details">
+
+            <p>
+                <strong>Username:</strong>
+                {{ user.username }}
+            </p>
+
+            <p>
+                <strong>Role:</strong>
+                {{ user.get_role_display }}
+            </p>
+
+            <p>
+                <strong>Joined:</strong>
+
+                {{ membership.approved_date|date:"d M Y" }}
+
+            </p>
+
+            <p>
+                <strong>Status:</strong>
+
+                <span class="active-status">
+                    ACTIVE
+                </span>
+
+            </p>
+
+        </div>
+
+
+        {% if membership.qr_code %}
+
+            <img
+                src="{{ membership.qr_code.url }}"
+                class="qr-code">
+
+            <div class="verify-text">
+
+                Scan QR Code to verify membership
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+
+    <div class="card-footer">
+
+        SafetyFund — Building Financial Security Together
+
+    </div>
+
+</div>
+
+</body>
+
+</html>

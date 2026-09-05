@@ -25,7 +25,12 @@ SECRET_KEY = 'django-insecure-y-bvknmh019642kb3hoo6i_he^0us-k-vh$+xod-+_n4lbb^p8
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    'localhost',
+    '192.168.1.84',
+]
 
 
 # Application definition
@@ -42,6 +47,7 @@ INSTALLED_APPS = [
     'membership',
     'finance',
     'notifications',
+    'activitylogs',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +73,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'notifications.context_processors.notification_count',
+                'accounts.context_processors.site_settings',
             ],
         },
     },
@@ -88,6 +95,8 @@ DATABASES = {
         'PORT': '5432',
     }
 }
+
+
 
 
 # Password validation

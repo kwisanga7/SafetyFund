@@ -47,7 +47,9 @@
 
     {% else %}
 
-        <span>SafetyFund</span>
+        <span>
+    {{ site_setting.site_name|default:"SafetyFund" }}
+</span>
 
     {% endif %}
 

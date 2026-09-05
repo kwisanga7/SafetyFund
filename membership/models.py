@@ -3,6 +3,11 @@ from django.conf import settings
 from django.utils import timezone
 from datetime import datetime
 
+import qrcode
+
+from io import BytesIO
+from django.core.files import File
+
 
 class MembershipApplication(models.Model):
 
@@ -33,7 +38,6 @@ class MembershipApplication(models.Model):
         max_length=100
     )
 
-    # Membership Fee Payment Proof
     payment_proof = models.FileField(
         upload_to='membership_proofs/',
         null=True,
@@ -67,10 +71,17 @@ class MembershipApplication(models.Model):
         blank=True
     )
 
+    qr_code = models.ImageField(
+        upload_to='member_qr_codes/',
+        blank=True,
+        null=True
+    )
+
     def save(self, *args, **kwargs):
 
         if self.status == 'APPROVED':
 
+            # Generate member number
             if not self.member_number:
 
                 year = datetime.now().year
@@ -85,13 +96,46 @@ class MembershipApplication(models.Model):
                     f"SF{year}{next_number:03d}"
                 )
 
+            # Set approval date
             if not self.approved_date:
                 self.approved_date = timezone.now()
 
+            # Update user role
             self.user.role = 'MEMBER'
             self.user.save()
+
+            # Generate QR Code
+            if not self.qr_code:
+
+                qr_data = (
+                    f"http://127.0.0.1:8000/"
+                    f"verify-member/{self.member_number}/"
+                )
+
+                qr_image = qrcode.make(qr_data)
+
+                buffer = BytesIO()
+
+                qr_image.save(
+                    buffer,
+                    format='PNG'
+                )
+
+                filename = (
+                    f"{self.member_number}.png"
+                )
+
+                self.qr_code.save(
+                    filename,
+                    File(buffer),
+                    save=False
+                )
 
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.username} - {self.status}"
+
+        return (
+            f"{self.user.username} - "
+            f"{self.status}"
+        )

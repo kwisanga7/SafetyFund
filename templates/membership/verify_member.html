@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="verification-page">
+
+    <div class="verification-card">
+
+        <div class="verification-success">
+            ✓
+        </div>
+
+        <h2>Member Verified</h2>
+
+        <p class="verification-message">
+            This is an active SafetyFund membership.
+        </p>
+
+        {% if membership.user.profile_picture %}
+
+            <img
+                src="{{ membership.user.profile_picture.url }}"
+                alt="{{ membership.user.username }}"
+                class="verification-photo">
+
+        {% endif %}
+
+        <div class="verification-info">
+
+            <div>
+                <span>Name</span>
+                <strong>
+                    {{ membership.user.first_name }}
+                    {{ membership.user.last_name }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Member Number</span>
+                <strong>
+                    {{ membership.member_number }}
+                </strong>
+            </div>
+
+            <div>
+                <span>Status</span>
+                <strong class="verified-status">
+                    Active Member
+                </strong>
+            </div>
+
+            <div>
+                <span>Joined</span>
+                <strong>
+                    {{ membership.approved_date|date:"d M Y" }}
+                </strong>
+            </div>
+
+        </div>
+
+        <p class="verification-footer">
+            Verified by SafetyFund Membership System
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}

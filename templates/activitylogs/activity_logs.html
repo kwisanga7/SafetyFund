@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>System Activity Logs</h2>
+
+<table class="table table-striped">
+
+    <thead>
+
+        <tr>
+            <th>User</th>
+            <th>Action</th>
+            <th>Date</th>
+        </tr>
+
+    </thead>
+
+    <tbody>
+
+        {% for log in logs %}
+
+        <tr>
+
+            <td>{{ log.user }}</td>
+
+            <td>{{ log.action }}</td>
+
+            <td>{{ log.created_at }}</td>
+
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+{% endblock %}
