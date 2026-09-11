@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="announcement-detail-page">
+
+    <div class="announcement-detail-card">
+
+        {% if announcement.image %}
+
+        <div class="announcement-detail-image">
+
+            <img
+                src="{{ announcement.image.url }}"
+                alt="{{ announcement.title }}">
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="announcement-detail-content">
+
+            <p class="announcement-detail-date">
+                {{ announcement.created_at|date:"F d, Y" }}
+            </p>
+
+            <h1 class="announcement-detail-title">
+                {{ announcement.title }}
+            </h1>
+
+            <hr>
+
+            <div class="announcement-detail-description">
+
+                {{ announcement.description|linebreaks }}
+
+            </div>
+
+            <div class="announcement-detail-actions">
+
+                <a
+                    href="{% url 'announcements' %}"
+                    class="read-more-btn">
+
+                    ← Back to Announcements
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

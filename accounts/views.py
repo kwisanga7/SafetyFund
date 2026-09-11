@@ -36,7 +36,7 @@ from django.contrib.staticfiles import finders
 from membership.models import MembershipApplication
 from xhtml2pdf import pisa
 import os
-
+from django.contrib import messages
 
 from finance.models import (
     ShareTransaction,
@@ -48,35 +48,55 @@ from finance.models import (
 def register(request):
 
     if request.method == 'POST':
+
         form = RegisterForm(request.POST)
 
         if form.is_valid():
+
             user = form.save()
 
-            
-
             ActivityLog.objects.create(
-            user=user,
-            action='Registered a new account'
-           )
+                user=user,
+                action='Registered a new account'
+            )
 
             admins = User.objects.filter(
-               role='ADMINISTRATOR'
-              )
+                role='ADMINISTRATOR'
+            )
 
             for admin in admins:
 
-             Notification.objects.create(
-                user=admin,
-                title='New User Registration',
-                message=f'{user.username} has registered.'
+                Notification.objects.create(
+                    user=admin,
+                    title='New User Registration',
+                    message=f'{user.username} has registered.'
+                )
+
+            messages.success(
+                request,
+                'Account created successfully.'
             )
+
             return redirect('home')
 
+        else:
+
+            messages.error(
+                request,
+                'Please correct the errors below.'
+            )
+
     else:
+
         form = RegisterForm()
 
-    return render(request, 'accounts/register.html', {'form': form})
+    return render(
+        request,
+        'accounts/register.html',
+        {
+            'form': form
+        }
+    )
 
 
 def login_user(request):

@@ -151,6 +151,7 @@ MAILERS = {
     },
 }
 
+
 # Media Settings
 
 MEDIA_URL = '/media/'

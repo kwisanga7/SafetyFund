@@ -15,7 +15,8 @@ from .views import (
     make_repayment,
     pending_repayments,
     approve_repayment,
-    reject_repayment
+    reject_repayment,
+    my_loans
 )
 
 
@@ -118,9 +119,9 @@ path(
 ),
 
 path(
-    'pending-repayments/',
-    pending_repayments,
-    name='pending_repayments'
+    'my-loans/',
+    my_loans,
+    name='my_loans'
 ),
 
 ]

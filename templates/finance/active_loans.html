@@ -2,41 +2,59 @@
 
 {% block content %}
 
-<h2>Active Loans</h2>
+<h2>My Loans</h2>
 
-<table class="table">
+<table class="table table-striped">
 
-<tr>
-    <th>Member</th>
-    <th>Loan Amount</th>
-    <th>Remaining Balance</th>
-    <th>Action</th>
-</tr>
+    <thead>
 
-{% for loan in loans %}
+        <tr>
+            <th>Loan Amount</th>
+            <th>Remaining Balance</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
 
-<tr>
+    </thead>
 
-    <td>{{ loan.member.username }}</td>
+    <tbody>
 
-    <td>{{ loan.requested_amount }}</td>
+    {% for loan in loans %}
 
-    <td>{{ loan.remaining_balance }}</td>
+        <tr>
 
-    <td>
+            <td>{{ loan.requested_amount }} RWF</td>
 
-        <a href="/record-repayment/{{ loan.id }}/"
-           class="btn btn-success">
+            <td>{{ loan.remaining_balance }} RWF</td>
 
-            Record Repayment
+            <td>{{ loan.status }}</td>
 
-        </a>
+            <td>
 
-    </td>
+                <a href="{% url 'make_repayment' loan.id %}"
+                   class="btn btn-success btn-sm">
 
-</tr>
+                    Make Repayment
 
-{% endfor %}
+                </a>
+
+            </td>
+
+        </tr>
+
+    {% empty %}
+
+        <tr>
+
+            <td colspan="4">
+                No loans found.
+            </td>
+
+        </tr>
+
+    {% endfor %}
+
+    </tbody>
 
 </table>
 

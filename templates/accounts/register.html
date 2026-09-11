@@ -1,3 +1,4 @@
+```html
 {% extends 'base.html' %}
 
 {% block content %}
@@ -10,11 +11,67 @@
             Create Account
         </h2>
 
-        <form method="POST">
+        <form method="POST" novalidate>
 
             {% csrf_token %}
 
-            {{ form.as_p }}
+            <!-- General form errors -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+            {% endif %}
+
+
+            {% for field in form %}
+
+                <div class="mb-3">
+
+                    <!-- Field label -->
+                    <label for="{{ field.id_for_label }}" class="form-label">
+
+                        {{ field.label }}
+
+                        {% if field.field.required %}
+                            <span class="text-danger">*</span>
+                        {% endif %}
+
+                    </label>
+
+
+                    <!-- Field -->
+                    {{ field }}
+
+
+                    <!-- Help text / requirements -->
+                    {% if field.help_text %}
+                        <div class="form-text">
+                            {{ field.help_text|safe }}
+                        </div>
+                    {% endif %}
+
+
+                    <!-- Validation errors -->
+                    {% if field.errors %}
+                        <div class="text-danger mt-1">
+
+                            {% for error in field.errors %}
+                                <div>
+                                    <small>
+                                        {{ error }}
+                                    </small>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
 
             <button
                 type="submit"
@@ -24,7 +81,9 @@
 
         </form>
 
+
         <hr>
+
 
         <p class="text-center">
             Already have an account?
@@ -36,3 +95,4 @@
 </div>
 
 {% endblock %}
+```

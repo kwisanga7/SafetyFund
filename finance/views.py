@@ -19,6 +19,8 @@ from accounts.models import Announcement
 from notifications.models import Notification
 from activitylogs.models import ActivityLog
 User = get_user_model()
+from django.contrib.auth.decorators import login_required
+from .models import Loan
 
 
 
@@ -647,4 +649,21 @@ def home(request):
         request,
         'home.html',
         context
+    )
+
+
+
+@login_required
+def my_loans(request):
+
+    loans = Loan.objects.filter(
+        member=request.user
+    )
+
+    return render(
+        request,
+        'finance/active_loans.html',
+        {
+            'loans': loans
+        }
     )

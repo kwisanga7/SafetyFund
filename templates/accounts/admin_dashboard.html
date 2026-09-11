@@ -2,7 +2,6 @@
 
 {% block content %}
 
-
 <div class="container py-4">
 
     <div class="mb-4">
@@ -12,55 +11,51 @@
         </p>
     </div>
 
-    <div class="row g-4">
 
-        <div class="col-md-3">
-            <div class="finance-card">
-                <h5>Total Users</h5>
-                <h2>{{ total_users }}</h2>
-            </div>
+    <!-- Statistics Cards -->
+
+    <div class="dashboard-grid">
+
+        <div class="dashboard-card">
+            <h5>Total Users</h5>
+            <h2>{{ total_users }}</h2>
         </div>
 
-        <div class="col-md-3">
-            <div class="finance-card">
+        <div class="dashboard-card">
                 <h5>Total Members</h5>
                 <h2>{{ total_members }}</h2>
-            </div>
         </div>
 
-        <div class="col-md-3">
-            <div class="finance-card">
-                <h5>Pending Memberships</h5>
-                <h2>{{ pending_memberships }}</h2>
-            </div>
+        
+
+        <div class="dashboard-card">
+            <h5>Finance Officers</h5>
+            <h2>{{ finance_officers }}</h2>
         </div>
 
-        <div class="col-md-3">
-            <div class="finance-card">
-                <h5>Finance Officers</h5>
-                <h2>{{ finance_officers }}</h2>
-            </div>
+        <div class="dashboard-card">
+            <h5>Raised Issues</h5>
+            <h2></h2>
         </div>
 
-        <div class="col-md-3">
-            <div class="finance-card">
-                <h5>Pending Deposits</h5>
-                <h2>{{ pending_deposits }}</h2>
-            </div>
+        <div class="dashboard-card">
+            <h5>Pending Membership</h5>
+            <h2>{{ pending_memberships }}</h2>
         </div>
 
-        <div class="col-md-3">
-            <div class="finance-card">
-                <h5>Pending Loans</h5>
-                <h2>{{ pending_loans }}</h2>
-            </div>
+        <div class="dashboard-card">
+            <h5>Pending Deposits</h5>
+            <h2>{{ pending_deposits }}</h2>
         </div>
 
-        <div class="col-md-3">
-            <div class="finance-card">
-                <h5>Active Loans</h5>
-                <h2>{{ active_loans }}</h2>
-            </div>
+        <div class="dashboard-card">
+            <h5>Pending Loans</h5>
+            <h2>{{ pending_loans }}</h2>
+        </div>
+
+        <div class="dashboard-card">
+            <h5>Active Loans</h5>
+            <h2>{{ active_loans }}</h2>
         </div>
 
     </div>

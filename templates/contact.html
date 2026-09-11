@@ -1,27 +1,291 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 
-<div class="card shadow">
+<section class="contact-page">
 
-    <div class="card-body">
+    <div class="container">
 
-        <h3>Contact SafetyFund</h3>
+        <!-- PAGE HEADER -->
+        <div class="contact-header text-center">
 
-        <p>Email:
-            safetyfund26@gmail.com
-        </p>
+            <span class="section-tag">
+                Contact SafetyFund
+            </span>
 
-        <p>Phone:
-            +250 XXX XXX XXX
-        </p>
+            <h1>
+                We’re Here to Help
+            </h1>
 
-        <p>
-            Kigali, Rwanda
-        </p>
+            <p>
+                Reach out to SafetyFund for membership support,
+                financial assistance, account help, or general inquiries.
+            </p>
+
+        </div>
+
+
+        <!-- OFFICE + CONTACT INFORMATION -->
+
+        <div class="row align-items-center g-5 contact-main-section">
+
+            <!-- OFFICE IMAGE -->
+            <div class="col-lg-6">
+
+                <div class="contact-office-image">
+
+                    <img
+                        src="{% static 'images/safetyfund_office.jpg' %}"
+                        alt="SafetyFund Office">
+
+                </div>
+
+            </div>
+
+
+            <!-- CONTACT DETAILS -->
+            <div class="col-lg-6">
+
+                <div class="contact-info-wrapper">
+
+                    <h2>
+                        Get in Touch
+                    </h2>
+
+                    <p class="contact-intro">
+                        You can contact the appropriate SafetyFund office
+                        depending on the assistance you need.
+                    </p>
+
+
+                    <div class="contact-info-card">
+
+                        <h5>General Information</h5>
+
+                        <p>
+                            <strong>Email:</strong>
+                            info@safetyfund.com/ safetyfund26@gmail.com
+                        </p>
+
+                        <p>
+                            <strong>Phone:</strong>
+                            +250 7876 492 356
+                        </p>
+
+                        <p>
+                            <strong>Location:</strong>
+                            Kigali, Rwanda
+                        </p>
+
+                    </div>
+
+
+                    <div class="contact-info-card">
+
+                        <h5>Secretary Office</h5>
+
+                        <p>
+                            Membership records, meetings,
+                            applications and general administration.
+                        </p>
+
+                        <p>
+                            <strong>Email:</strong>
+                            secretary@safetyfund.com
+                        </p>
+
+                    </div>
+
+
+                    <div class="contact-info-card">
+
+                        <h5>Finance Office</h5>
+
+                        <p>
+                            Deposits, savings, shares,
+                            loans and repayment assistance.
+                        </p>
+
+                        <p>
+                            <strong>Email:</strong>
+                            finance@safetyfund.com
+                        </p>
+
+                    </div>
+
+
+                    <div class="contact-info-card">
+
+                        <h5>Help Center</h5>
+
+                        <p>
+                            Account access, password problems,
+                            website support and technical assistance.
+                        </p>
+
+                        <p>
+                            <strong>Email:</strong>
+                            support@safetyfund.com
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- WEBSITE HELP SECTION -->
+
+        <div class="website-help-section">
+
+            <div class="text-center mb-5">
+
+                <span class="section-tag">
+                    Using SafetyFund
+                </span>
+
+                <h2>
+                    How Can We Assist You?
+                </h2>
+
+                <p>
+                    Use the links below to quickly access
+                    important SafetyFund services.
+                </p>
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <!-- CREATE ACCOUNT -->
+
+                <div class="col-md-4">
+
+                    <div class="help-card">
+
+                        <div class="help-number">
+                            01
+                        </div>
+
+                        <h4>
+                            Create an Account
+                        </h4>
+
+                        <p>
+                            New to SafetyFund? Create an account
+                            to access the platform and begin your
+                            membership journey.
+                        </p>
+
+                        <a
+                            href="{% url 'register' %}"
+                            class="help-link">
+
+                            Create Account →
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- APPLY MEMBERSHIP -->
+
+                <div class="col-md-4">
+
+                    <div class="help-card">
+
+                        <div class="help-number">
+                            02
+                        </div>
+
+                        <h4>
+                            Become a Member
+                        </h4>
+
+                        <p>
+                            Already registered? Submit your
+                            membership application and payment
+                            proof to become a SafetyFund member.
+                        </p>
+
+                        {% if user.is_authenticated and user.role == 'USER' %}
+
+                            <a
+                                href="{% url 'apply_membership' %}"
+                                class="help-link">
+
+                                Apply for Membership →
+
+                            </a>
+
+                        {% elif not user.is_authenticated %}
+
+                            <a
+                                href="{% url 'login' %}"
+                                class="help-link">
+
+                                Login to Apply →
+
+                            </a>
+
+                        {% else %}
+
+                            <span class="help-disabled">
+                                Membership Available
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                <!-- ABOUT SAFETYFUND -->
+
+                <div class="col-md-4">
+
+                    <div class="help-card">
+
+                        <div class="help-number">
+                            03
+                        </div>
+
+                        <h4>
+                            Learn About SafetyFund
+                        </h4>
+
+                        <p>
+                            Discover our mission, objectives,
+                            history and the vision behind
+                            SafetyFund.
+                        </p>
+
+                        <a
+                            href="{% url 'about' %}"
+                            class="help-link">
+
+                            Read More About Us →
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
 
     </div>
 
-</div>
+</section>
 
 {% endblock %}
