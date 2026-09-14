@@ -2060,3 +2060,111 @@ form textarea:focus {
 
     font-size: 14px;
 }
+
+
+/* =========================
+   FINANCE DASHBOARD
+========================= */
+
+.dashboard-card{
+    border: none;
+    border-radius: 15px;
+    background: #ffffff;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.dashboard-card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+}
+
+.dashboard-card .card-body{
+    text-align: center;
+    padding: 25px;
+}
+
+.dashboard-card h5{
+    font-size: 1rem;
+    color: #6c757d;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.dashboard-card h2{
+    font-size: 2rem;
+    font-weight: 700;
+    color: #198754;
+    margin-bottom: 8px;
+}
+
+.dashboard-card small{
+    color: #6c757d;
+}
+
+.card-link{
+    text-decoration: none;
+    color: inherit;
+}
+
+.card-link:hover{
+    text-decoration: none;
+    color: inherit;
+}
+
+/* =========================
+   DASHBOARD HEADER
+========================= */
+
+.dashboard-title{
+    font-weight: 700;
+    color: #198754;
+}
+
+.dashboard-subtitle{
+    color: #6c757d;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+.finance-btn{
+    background-color: #198754;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    padding: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.finance-btn:hover{
+    background-color: #157347;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.finance-btn:focus{
+    box-shadow: none;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px){
+
+    .dashboard-card h2{
+        font-size: 1.6rem;
+    }
+
+    .dashboard-card .card-body{
+        padding: 18px;
+    }
+
+    .finance-btn{
+        margin-bottom: 10px;
+    }
+}

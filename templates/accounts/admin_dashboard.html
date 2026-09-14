@@ -11,55 +11,77 @@
         </p>
     </div>
 
-
     <!-- Statistics Cards -->
 
     <div class="dashboard-grid">
 
-        <div class="dashboard-card">
-            <h5>Total Users</h5>
-            <h2>{{ total_users }}</h2>
-        </div>
+        <a href="{% url 'manage_users' %}" class="card-link">
+            <div class="dashboard-card">
+                <h5>Total Users</h5>
+                <h2>{{ total_users }}</h2>
+                <small>Click to manage users</small>
+            </div>
+        </a>
 
-        <div class="dashboard-card">
+        <a href="{% url 'manage_members' %}" class="card-link">
+            <div class="dashboard-card">
                 <h5>Total Members</h5>
                 <h2>{{ total_members }}</h2>
-        </div>
+                <small>Click to view members</small>
+            </div>
+        </a>
 
-        
+        <a href="{% url 'manage_users' %}" class="card-link">
+            <div class="dashboard-card">
+                <h5>Finance Officers</h5>
+                <h2>{{ finance_officers }}</h2>
+                <small>Click to manage officers</small>
+            </div>
+        </a>
 
-        <div class="dashboard-card">
-            <h5>Finance Officers</h5>
-            <h2>{{ finance_officers }}</h2>
-        </div>
+        <a href="#" class="card-link">
+            <div class="dashboard-card">
+                <h5>Raised Issues</h5>
+                <h2>{{ raised_issues }}</h2>
+                <small>Click to review issues</small>
+            </div>
+        </a>
 
-        <div class="dashboard-card">
-            <h5>Raised Issues</h5>
-            <h2></h2>
-        </div>
+        <a href="{% url 'review_memberships' %}" class="card-link">
+            <div class="dashboard-card">
+                <h5>Pending Memberships</h5>
+                <h2>{{ pending_memberships }}</h2>
+                <small>Click to review applications</small>
+            </div>
+        </a>
 
-        <div class="dashboard-card">
-            <h5>Pending Membership</h5>
-            <h2>{{ pending_memberships }}</h2>
-        </div>
+        <a href="{% url 'pending_deposits' %}" class="card-link">
+            <div class="dashboard-card">
+                <h5>Pending Deposits</h5>
+                <h2>{{ pending_deposits }}</h2>
+                <small>Click to review deposits</small>
+            </div>
+        </a>
 
-        <div class="dashboard-card">
-            <h5>Pending Deposits</h5>
-            <h2>{{ pending_deposits }}</h2>
-        </div>
+        <a href="{% url 'pending_loans' %}" class="card-link">
+            <div class="dashboard-card">
+                <h5>Pending Loans</h5>
+                <h2>{{ pending_loans }}</h2>
+                <small>Click to review loans</small>
+            </div>
+        </a>
 
-        <div class="dashboard-card">
-            <h5>Pending Loans</h5>
-            <h2>{{ pending_loans }}</h2>
-        </div>
-
-        <div class="dashboard-card">
-            <h5>Active Loans</h5>
-            <h2>{{ active_loans }}</h2>
-        </div>
+        <a href="#" class="card-link">
+            <div class="dashboard-card">
+                <h5>Active Loans</h5>
+                <h2>{{ active_loans }}</h2>
+                <small>Click to manage loans</small>
+            </div>
+        </a>
 
     </div>
 
+    <!--
     <hr class="my-5">
 
     <h4 class="mb-3">Management</h4>
@@ -67,15 +89,23 @@
     <div class="row g-3">
 
         <div class="col-md-3">
-            <a href="{% url 'review_memberships' %}"class="btn finance-btn">Review Memberships</a>
+            <a href="{% url 'review_memberships' %}"
+               class="btn finance-btn">
+                Review Memberships
+            </a>
         </div>
 
         <div class="col-md-3">
-            <a href="{% url 'manage_members' %}"class="btn finance-btn">Manage Members</a>
+            <a href="{% url 'manage_members' %}"
+               class="btn finance-btn">
+                Manage Members
+            </a>
         </div>
 
         <div class="col-md-3">
-            <a href="{% url 'manage_users' %}"class="btn finance-btn"> Manage Users
+            <a href="{% url 'manage_users' %}"
+               class="btn finance-btn">
+                Manage Users
             </a>
         </div>
 
@@ -86,8 +116,23 @@
             </a>
         </div>
 
+        <div class="col-md-3">
+            <a href="{% url 'announcements' %}"
+               class="btn finance-btn">
+                Announcements
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="{% url 'add_announcement' %}"
+               class="btn finance-btn">
+                Add Announcement
+            </a>
+        </div>
+
     </div>
 
 </div>
+-->
 
 {% endblock %}

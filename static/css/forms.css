@@ -1,0 +1,68 @@
+/* ===================================
+   FORMS
+=================================== */
+
+.form-card {
+
+    background: white;
+
+    max-width: 700px;
+
+    margin: 40px auto;
+
+    padding: 30px;
+
+    border-radius: 15px;
+
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.form-card h2 {
+    color: #0D3B66;
+    font-weight: bold;
+}
+
+.form-control,
+.form-select {
+
+    border-radius: 10px;
+
+    padding: 10px;
+}
+
+.form-control:focus,
+.form-select:focus {
+
+    border-color: #2E7D32;
+
+    box-shadow: 0 0 5px rgba(46,125,50,0.4);
+}
+
+
+/* ===================================
+   BUTTONS
+=================================== */
+
+.btn-primary {
+    background-color: #0D3B66;
+    border-color: #0D3B66;
+}
+
+.btn-primary:hover {
+    background-color: #082c4c;
+    border-color: #082c4c;
+}
+
+.btn-success {
+    background-color: #2E7D32;
+    border-color: #2E7D32;
+}
+
+.btn-success:hover {
+    background-color: #256628;
+    border-color: #256628;
+}
+
+.btn-outline-light:hover {
+    color: #0D3B66;
+}

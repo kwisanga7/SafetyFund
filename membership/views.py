@@ -7,6 +7,7 @@ from notifications.models import Notification
 from activitylogs.models import ActivityLog
 from django.shortcuts import render, get_object_or_404
 from .models import MembershipApplication
+from accounts.models import User
 
 
 @login_required

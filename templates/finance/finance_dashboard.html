@@ -2,123 +2,211 @@
 
 {% block content %}
 
-<h1>Finance Dashboard</h1>
-<hr>
+<div class="container py-4">
 
-<div class="row">
+    <h1 class="mb-3">Finance Dashboard</h1>
+    <hr>
 
-    <div class="col-md-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5>Total Members</h5>
-                <h2>{{ total_members }}</h2>
+    <style>
+
+        .dashboard-card {
+            transition: all 0.3s ease;
+            border: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-radius: 12px;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            cursor: pointer;
+        }
+
+        .dashboard-card h5 {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .dashboard-card h2 {
+            color: #198754;
+            font-weight: bold;
+        }
+
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .finance-btn {
+            background-color: #198754;
+            color: white;
+            border: none;
+        }
+
+        .finance-btn:hover {
+            background-color: #146c43;
+            color: white;
+        }
+
+    </style>
+
+    <div class="row">
+
+        <!-- Total Members -->
+
+        <div class="col-md-4 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-body text-center">
+                    <h5>Total Members</h5>
+                    <h2>{{ total_members }}</h2>
+                </div>
             </div>
         </div>
+
+        <!-- Total Shares -->
+
+        <div class="col-md-4 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-body text-center">
+                    <h5>Total Shares</h5>
+                    <h2>{{ total_shares }}</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Savings -->
+
+        <div class="col-md-4 mb-4">
+            <div class="card dashboard-card">
+                <div class="card-body text-center">
+                    <h5>Total Savings</h5>
+                    <h2>{{ total_savings }} RWF</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Deposits -->
+
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'pending_deposits' %}" class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body text-center">
+                        <h5>Pending Deposits</h5>
+                        <h2>{{ pending_deposits }}</h2>
+                        <small>Click to review deposits</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Approved Deposits -->
+
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'pending_deposits' %}" class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body text-center">
+                        <h5>Approved Deposits</h5>
+                        <h2>{{ approved_deposits }}</h2>
+                        <small>View deposit records</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Monthly Deposits -->
+
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'pending_deposits' %}" class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body text-center">
+                        <h5>This Month's Deposits</h5>
+                        <h2>{{ monthly_deposits }} RWF</h2>
+                        <small>View deposits</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Pending Loans -->
+
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'pending_loans' %}" class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body text-center">
+                        <h5>Pending Loans</h5>
+                        <h2>{{ pending_loans }}</h2>
+                        <small>Click to review loans</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Active Loans -->
+
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'my_loans' %}" class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body text-center">
+                        <h5>Active Loans</h5>
+                        <h2>{{ active_loans }}</h2>
+                        <small>View active loans</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Outstanding Loans -->
+
+        <div class="col-md-4 mb-4">
+            <a href="{% url 'compliance_report' %}" class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body text-center">
+                        <h5>Outstanding Loans</h5>
+                        <h2>{{ outstanding_loans }} RWF</h2>
+                        <small>View compliance report</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+
     </div>
 
-    <div class="col-md-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5>Total Shares</h5>
-                <h2>{{ total_shares }}</h2>
-            </div>
-        </div>
-    </div>
+    <hr class="my-4">
 
-    <div class="col-md-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5>Total Savings</h5>
-                <h2>{{ total_savings }} RWF</h2>
-            </div>
-        </div>
-    </div>
+    <h4 class="mb-3">Finance Actions</h4>
 
-    <div class="col-md-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5>Pending Deposits</h5>
-                <h2>{{ pending_deposits }}</h2>
-            </div>
-        </div>
-    </div>
+    <div class="row g-3">
 
-    <div class="col-md-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5>Approved Deposits</h5>
-                <h2>{{ approved_deposits }}</h2>
-            </div>
+        <div class="col-md-3">
+            <a href="{% url 'pending_deposits' %}"
+               class="btn finance-btn w-100">
+                Review Deposits
+            </a>
         </div>
-    </div>
 
-    <div class="col-md-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5>This Month's Deposits</h5>
-                <h2>{{ monthly_deposits }} RWF</h2>
-            </div>
+        <div class="col-md-3">
+            <a href="{% url 'pending_loans' %}"
+               class="btn finance-btn w-100">
+                Review Loans
+            </a>
         </div>
-    </div>
 
-    <div class="col-md-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5>Pending Loans</h5>
-                <h2>{{ pending_loans }}</h2>
-            </div>
+        <div class="col-md-3">
+            <a href="{% url 'pending_repayments' %}"
+               class="btn finance-btn w-100">
+                Review Repayments
+            </a>
         </div>
-    </div>
 
-    <div class="col-md-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5>Active Loans</h5>
-                <h2>{{ active_loans }}</h2>
-            </div>
+        <div class="col-md-3">
+            <a href="{% url 'compliance_report' %}"
+               class="btn finance-btn w-100">
+                Compliance Report
+            </a>
         </div>
-    </div>
 
-    <div class="col-md-4 mb-3">
-        <div class="card">
-            <div class="card-body">
-                <h5>Outstanding Loans</h5>
-                <h2>{{ outstanding_loans }} RWF</h2>
-            </div>
-        </div>
     </div>
 
 </div>
 
-<div class="row mb-4">
-
-    <div class="col-md-3">
-        <a href="{% url 'pending_deposits' %}"
-           class="btn finance-btn w-100">
-            Review Deposits
-        </a>
-    </div>
-
-    <div class="col-md-3">
-        <a href="{% url 'pending_loans' %}"
-           class="btn finance-btn w-100">
-            Review Loans
-        </a>
-    </div>
-
-    <div class="col-md-3">
-        <a href="{% url 'pending_repayments' %}"
-           class="btn finance-btn w-100">
-            Review Repayments
-        </a>
-    </div>
-
-    <div class="col-md-3">
-        <a href="{% url 'compliance_report' %}"
-           class="btn finance-btn w-100">
-            Compliance Report
-        </a>
-    </div>
-
-</div>
 {% endblock %}

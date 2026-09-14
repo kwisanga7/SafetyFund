@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'finance',
     'notifications',
     'activitylogs',
+
+    
 ]
 
 MIDDLEWARE = [
@@ -159,3 +161,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 
 AUTH_USER_MODEL = 'accounts.User'
+

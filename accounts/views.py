@@ -482,21 +482,20 @@ def add_announcement(request):
 
         if form.is_valid():
 
-            form.save()
+          announcement = form.save()
 
-            users = User.objects.all()
+        users = User.objects.all()
 
-            for user in users:
+        for user in users:
 
-             Notification.objects.create(
-                user=user,
-                title='New Announcement',
-                message=f'New announcement: {announcement.title}'
-                )
+         Notification.objects.create(
+            user=user,
+            title='New Announcement',
+            message=f'New announcement: {announcement.title}'
+        )
 
-            return redirect(
-                'announcements'
-            )
+        return redirect('announcements')
+
 
     else:
 
