@@ -1,68 +1,80 @@
-/* ===================================
-   FORMS
-=================================== */
+/* =========================
+   FORM CONTAINER
+========================= */
+
+.form-container {
+    max-width: 700px;
+    margin: 40px auto;
+}
 
 .form-card {
-
     background: white;
-
-    max-width: 700px;
-
-    margin: 40px auto;
-
     padding: 30px;
-
     border-radius: 15px;
-
-    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
-.form-card h2 {
+/* =========================
+   FORM ELEMENTS
+========================= */
+
+form p {
+    margin-bottom: 15px;
+}
+
+form label {
+    font-weight: 600;
+    display: block;
+    margin-bottom: 5px;
     color: #0D3B66;
-    font-weight: bold;
 }
 
-.form-control,
-.form-select {
-
-    border-radius: 10px;
-
+form input,
+form select,
+form textarea {
+    width: 100%;
     padding: 10px;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
 }
 
-.form-control:focus,
-.form-select:focus {
-
+form input:focus,
+form select:focus,
+form textarea:focus {
+    outline: none;
     border-color: #2E7D32;
-
-    box-shadow: 0 0 5px rgba(46,125,50,0.4);
+    box-shadow: 0 0 5px rgba(46,125,50,0.3);
 }
 
+/* =========================
+   FORM BUTTONS
+========================= */
 
-/* ===================================
-   BUTTONS
-=================================== */
-
-.btn-primary {
-    background-color: #0D3B66;
-    border-color: #0D3B66;
+.form-btn {
+    background: #198754;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    width: 100%;
 }
 
-.btn-primary:hover {
-    background-color: #082c4c;
-    border-color: #082c4c;
+.form-btn:hover {
+    background: #157347;
 }
 
-.btn-success {
-    background-color: #2E7D32;
-    border-color: #2E7D32;
-}
+/* =========================
+   RESPONSIVE
+========================= */
 
-.btn-success:hover {
-    background-color: #256628;
-    border-color: #256628;
-}
+@media (max-width: 768px) {
 
-.btn-outline-light:hover {
-    color: #0D3B66;
+    .form-container {
+        margin: 20px;
+    }
+
+    .form-card {
+        padding: 20px;
+    }
 }

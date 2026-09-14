@@ -1,7 +1,38 @@
-.member-id-card {
-    border-radius: 15px;
+.id-card-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
 }
 
-.qr-code {
-    width: 100px;
+.member-id-card {
+    width: 380px;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.member-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.member-photo-placeholder {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #148f37;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.member-qr img {
+    width: 120px;
+    height: 120px;
 }
