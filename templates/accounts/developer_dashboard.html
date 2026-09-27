@@ -60,7 +60,130 @@
             <h2>{{ total_loans }}</h2>
         </div>
 
+                <div class="dashboard-card">
+            <h5>Loans</h5>
+            <a href="{% url 'developer_feedback' %}" class="btn btn-primary">
+    System Feedback
+</a>
+        </div>
+
     </div>
+
+
+    <div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total Feedback
+                </h6>
+
+                <h2>
+                    {{ feedback_total }}
+                </h2>
+
+                <a
+                    href="{% url 'developer_feedback' %}"
+                    class="btn btn-sm btn-primary"
+                >
+                    View Feedback
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Open
+                </h6>
+
+                <h2>
+                    {{ feedback_open }}
+                </h2>
+
+                <a
+                    href="{% url 'developer_feedback' %}"
+                    class="btn btn-sm btn-outline-primary"
+                >
+                    View
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Under Review
+                </h6>
+
+                <h2>
+                    {{ feedback_review }}
+                </h2>
+
+                <a
+                    href="{% url 'developer_feedback' %}"
+                    class="btn btn-sm btn-outline-warning"
+                >
+                    View
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    In Progress
+                </h6>
+
+                <h2>
+                    {{ feedback_progress }}
+                </h2>
+
+                <a
+                    href="{% url 'developer_feedback' %}"
+                    class="btn btn-sm btn-outline-success"
+                >
+                    View
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
     <!-- System Information -->
 

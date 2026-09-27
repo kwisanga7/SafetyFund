@@ -124,8 +124,8 @@
 =================================== */
 
 .dashboard-btn {
-    background: #d6d9dc;
-    color: #111111;
+    background: #198754;
+    color: white;
     padding: 12px 20px;
     border-radius: 8px;
     text-decoration: none;
@@ -134,8 +134,8 @@
 }
 
 .dashboard-btn:hover {
-    background: #f9fafc;
-    color: #000000;
+    background: #157347;
+    color: white;
     transform: translateY(-2px);
 }
 

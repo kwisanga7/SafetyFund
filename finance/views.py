@@ -667,3 +667,70 @@ def my_loans(request):
             'loans': loans
         }
     )
+
+
+@login_required
+def dashboard(request):
+
+    total_shares = (
+        ShareTransaction.objects.filter(
+            member=request.user
+        ).aggregate(
+            total=Sum('shares')
+        )['total'] or 0
+    )
+
+    locked_shares = (
+        Loan.objects.filter(
+            member=request.user,
+            status='APPROVED'
+        ).aggregate(
+            total=Sum('locked_shares')
+        )['total'] or 0
+    )
+
+    available_shares = (
+        total_shares -
+        locked_shares
+    )
+
+    total_deposits = (
+        DepositRequest.objects.filter(
+            member=request.user,
+            status='APPROVED'
+        ).aggregate(
+            total=Sum('amount')
+        )['total'] or 0
+    )
+
+    active_loans = Loan.objects.filter(
+        member=request.user,
+        status='APPROVED'
+    ).count()
+
+    pending_requests = (
+        DepositRequest.objects.filter(
+            member=request.user,
+            status='PENDING'
+        ).count()
+        +
+        Loan.objects.filter(
+            member=request.user,
+            status='PENDING'
+        ).count()
+    )
+
+    context = {
+        'total_shares': total_shares,
+        'available_shares': available_shares,
+        'locked_shares': locked_shares,
+        'total_deposits': total_deposits,
+        'active_loans': active_loans,
+        'pending_requests': pending_requests,
+    }
+
+    return render(
+        request,
+        'accounts/dashboard.html',
+        context
+    )

@@ -19,6 +19,10 @@ urlpatterns = [
     path('', include('finance.urls')),
     path('', include('notifications.urls')),
     path('', include('activitylogs.urls')),
+    path(
+    'feedback/',
+    include('feedback.urls')
+),
 ]
 if settings.DEBUG:
     urlpatterns += static(

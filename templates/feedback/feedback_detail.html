@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h2>{{ feedback.title }}</h2>
+
+            <p class="text-muted mb-0">
+                Feedback #{{ feedback.id }}
+            </p>
+        </div>
+
+        <a href="{% url 'my_feedback' %}"
+           class="btn btn-secondary">
+            Back
+        </a>
+
+    </div>
+
+
+    <!-- FEEDBACK INFORMATION -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <strong>Feedback Information</strong>
+        </div>
+
+        <div class="card-body">
+
+            <div class="row mb-3">
+
+                <div class="col-md-6">
+
+                    <strong>Title</strong>
+
+                    <p>
+                        {{ feedback.title }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <strong>Type</strong>
+
+                    <p>
+                        {{ feedback.get_issue_type_display }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-3">
+
+                    <strong>Priority</strong>
+
+                    <p>
+                        {{ feedback.get_priority_display }}
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="mb-3">
+
+                <strong>Description</strong>
+
+                <div class="border rounded p-3 mt-2">
+
+                    {{ feedback.description|linebreaks }}
+
+                </div>
+
+            </div>
+
+
+            <div class="row">
+
+                <div class="col-md-4">
+
+                    <strong>Submitted By</strong>
+
+                    <p>
+                        {{ feedback.created_by.username }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <strong>Created</strong>
+
+                    <p>
+                        {{ feedback.created_at|date:"d M Y H:i" }}
+                    </p>
+
+                </div>
+
+                <div class="col-md-4">
+
+                    <strong>Last Updated</strong>
+
+                    <p>
+                        {{ feedback.updated_at|date:"d M Y H:i" }}
+                    </p>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ADMIN / DEVELOPER REVIEW -->
+
+    {% if review_form %}
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <strong>Review & Management</strong>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="update"
+                >
+
+                <div class="row">
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Status
+                        </label>
+
+                        {{ review_form.status }}
+
+                    </div>
+
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Priority
+                        </label>
+
+                        {{ review_form.priority }}
+
+                    </div>
+
+
+                    <div class="col-md-4 mb-3">
+
+                        <label class="form-label">
+                            Assign To
+                        </label>
+
+                        {{ review_form.assigned_to }}
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                >
+                    Update Feedback
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- COMMENTS -->
+
+    <div class="card shadow-sm mb-4">
+
+        <div class="card-header">
+            <strong>Discussion</strong>
+        </div>
+
+        <div class="card-body">
+
+            {% if comments %}
+
+                {% for comment in comments %}
+
+                    <div class="border rounded p-3 mb-3">
+
+                        <div class="d-flex justify-content-between">
+
+                            <strong>
+                                {{ comment.user.username }}
+                            </strong>
+
+                            <small class="text-muted">
+                                {{ comment.created_at|date:"d M Y H:i" }}
+                            </small>
+
+                        </div>
+
+                        <hr>
+
+                        <p class="mb-0">
+                            {{ comment.comment|linebreaks }}
+                        </p>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p class="text-muted">
+                    No comments yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- ADD COMMENT -->
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <strong>Add Comment</strong>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="comment"
+                >
+
+                <div class="mb-3">
+
+                    {{ comment_form.comment }}
+
+                </div>
+
+                <button
+                    type="submit"
+                    class="btn btn-success"
+                >
+                    Add Comment
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -13,73 +13,202 @@
 
     <!-- Statistics Cards -->
 
-    <div class="dashboard-grid">
+<div class="dashboard-grid">
 
-        <a href="{% url 'manage_users' %}" class="card-link">
-            <div class="dashboard-card">
-                <h5>Total Users</h5>
-                <h2>{{ total_users }}</h2>
-                <small>Click to manage users</small>
-            </div>
-        </a>
+    <a href="{% url 'manage_users' %}" class="card-link">
+        <div class="dashboard-card">
+            <h5>Total Users</h5>
+            <h2>{{ total_users }}</h2>
+            <small>Click to manage users</small>
+        </div>
+    </a>
 
-        <a href="{% url 'manage_members' %}" class="card-link">
-            <div class="dashboard-card">
-                <h5>Total Members</h5>
-                <h2>{{ total_members }}</h2>
-                <small>Click to view members</small>
-            </div>
-        </a>
 
-        <a href="{% url 'manage_users' %}" class="card-link">
-            <div class="dashboard-card">
-                <h5>Finance Officers</h5>
-                <h2>{{ finance_officers }}</h2>
-                <small>Click to manage officers</small>
-            </div>
-        </a>
+    <a href="{% url 'manage_members' %}" class="card-link">
+        <div class="dashboard-card">
+            <h5>Total Members</h5>
+            <h2>{{ total_members }}</h2>
+            <small>Click to view members</small>
+        </div>
+    </a>
 
-        <a href="#" class="card-link">
-            <div class="dashboard-card">
-                <h5>Raised Issues</h5>
-                <h2>{{ raised_issues }}</h2>
-                <small>Click to review issues</small>
-            </div>
-        </a>
 
-        <a href="{% url 'review_memberships' %}" class="card-link">
-            <div class="dashboard-card">
-                <h5>Pending Memberships</h5>
-                <h2>{{ pending_memberships }}</h2>
-                <small>Click to review applications</small>
-            </div>
-        </a>
+    <a href="{% url 'manage_users' %}" class="card-link">
+        <div class="dashboard-card">
+            <h5>Finance Officers</h5>
+            <h2>{{ finance_officers }}</h2>
+            <small>Click to manage officers</small>
+        </div>
+    </a>
 
-        <a href="{% url 'pending_deposits' %}" class="card-link">
-            <div class="dashboard-card">
-                <h5>Pending Deposits</h5>
-                <h2>{{ pending_deposits }}</h2>
-                <small>Click to review deposits</small>
-            </div>
-        </a>
 
-        <a href="{% url 'pending_loans' %}" class="card-link">
-            <div class="dashboard-card">
-                <h5>Pending Loans</h5>
-                <h2>{{ pending_loans }}</h2>
-                <small>Click to review loans</small>
-            </div>
-        </a>
+    <a href="{% url 'admin_feedback' %}" class="card-link">
+        <div class="dashboard-card">
+            <h5>Feedback & Issues</h5>
 
-        <a href="#" class="card-link">
-            <div class="dashboard-card">
-                <h5>Active Loans</h5>
-                <h2>{{ active_loans }}</h2>
-                <small>Click to manage loans</small>
+            <h2>{{ feedback_total }}</h2>
+
+            <small>
+                {{ feedback_open }} Open |
+                {{ feedback_review }} Under Review |
+                {{ feedback_progress }} In Progress
+            </small>
+        </div>
+    </a>
+
+
+    <a href="{% url 'review_memberships' %}" class="card-link">
+        <div class="dashboard-card">
+            <h5>Pending Memberships</h5>
+            <h2>{{ pending_memberships }}</h2>
+            <small>Click to review applications</small>
+        </div>
+    </a>
+
+
+    <a href="{% url 'pending_deposits' %}" class="card-link">
+        <div class="dashboard-card">
+            <h5>Pending Deposits</h5>
+            <h2>{{ pending_deposits }}</h2>
+            <small>Click to review deposits</small>
+        </div>
+    </a>
+
+
+    <a href="{% url 'pending_loans' %}" class="card-link">
+        <div class="dashboard-card">
+            <h5>Pending Loans</h5>
+            <h2>{{ pending_loans }}</h2>
+            <small>Click to review loans</small>
+        </div>
+    </a>
+
+
+    <a href="#" class="card-link">
+        <div class="dashboard-card">
+            <h5>Active Loans</h5>
+            <h2>{{ active_loans }}</h2>
+            <small>Click to manage loans</small>
+        </div>
+    </a>
+
+</div>
+
+
+<div class="row g-3 mb-4">
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Total Feedback
+                </h6>
+
+                <h2>
+                    {{ feedback_total }}
+                </h2>
+
+                <a
+                    href="{% url 'admin_feedback' %}"
+                    class="btn btn-sm btn-primary"
+                >
+                    View Feedback
+                </a>
+
             </div>
-        </a>
+
+        </div>
 
     </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Open
+                </h6>
+
+                <h2>
+                    {{ feedback_open }}
+                </h2>
+
+                <a
+                    href="{% url 'admin_feedback' %}"
+                    class="btn btn-sm btn-outline-primary"
+                >
+                    View
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    Under Review
+                </h6>
+
+                <h2>
+                    {{ feedback_review }}
+                </h2>
+
+                <a
+                    href="{% url 'admin_feedback' %}"
+                    class="btn btn-sm btn-outline-warning"
+                >
+                    View
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="col-md-3">
+
+        <div class="card shadow-sm h-100">
+
+            <div class="card-body">
+
+                <h6 class="text-muted">
+                    In Progress
+                </h6>
+
+                <h2>
+                    {{ feedback_progress }}
+                </h2>
+
+                <a
+                    href="{% url 'admin_feedback' %}"
+                    class="btn btn-sm btn-outline-success"
+                >
+                    View
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
 
     <!--
     <hr class="my-5">

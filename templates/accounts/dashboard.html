@@ -2,103 +2,130 @@
 
 {% block content %}
 
-<h2 class="mb-4">
-    Member Dashboard
-</h2>
+<div class="container py-4">
 
-<div class="row">
+    <div class="mb-4">
+        <h2 class="dashboard-title">
+            Member Dashboard
+        </h2>
+        <p class="dashboard-subtitle">
+            Manage your shares, deposits, loans and membership activities.
+        </p>
+    </div>
 
-    <div class="col-md-3">
+    <!-- DASHBOARD CARDS -->
 
-        <div class="dashboard-card card-shares">
+    <div class="row g-4">
 
-            <h5>Total Shares</h5>
-
-            <h2>
-                {{ total_shares }}
-            </h2>
-
+        <div class="col-md-3">
+            <a href="{% url 'deposit_request' %}"
+               class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <h5>Total Shares</h5>
+                        <h2>{{ total_shares }}</h2>
+                        <small>View contributions</small>
+                    </div>
+                </div>
+            </a>
         </div>
+
+        <div class="col-md-3">
+            <a href="{% url 'deposit_request' %}"
+               class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <h5>available Shares</h5>
+                        <h2>{{ available_shares }}</h2>
+                        <small>available Shares</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="{% url 'my_loans' %}"
+               class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <h5>Locked Shares</h5>
+                        <h2>{{ locked_shares }}</h2>
+                        <small>View loans</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a href="{% url 'my_loans' %}"
+               class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <h5>Active Loans</h5>
+                        <h2>{{ active_loans }}</h2>
+                        <small>Track requests</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+                <div class="col-md-3">
+            <a href="{% url 'my_loans' %}"
+               class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body">
+                        <h5>Pending Requests</h5>
+                        <h2>{{ pending_requests }}</h2>
+                        <small>Track requests</small>
+                    </div>
+                </div>
+            </a>
+        </div>
+
 
     </div>
 
-    <div class="col-md-3">
+    <hr class="my-5">
 
-        <div class="dashboard-card card-deposits">
+    <!-- ACTION BUTTONS -->
 
-            <h5>Total Deposits</h5>
+    <h4 class="mb-3">
+        Quick Actions
+    </h4>
 
-            <h2>
-                {{ total_deposits }}
-            </h2>
+    <div class="row g-3">
 
+        {% if user.role != 'MEMBER' %}
+        <div class="col-md-3">
+            <a href="{% url 'apply_membership' %}"
+               class="btn finance-btn w-100">
+                Apply Membership
+            </a>
+        </div>
+        {% endif %}
+
+        <div class="col-md-3">
+            <a href="{% url 'deposit_request' %}"
+               class="btn finance-btn w-100">
+                Deposit Request
+            </a>
         </div>
 
-    </div>
-
-    <div class="col-md-3">
-
-        <div class="dashboard-card card-loans">
-
-            <h5>Active Loans</h5>
-
-            <h2>
-                {{ active_loans }}
-            </h2>
-
+        <div class="col-md-3">
+            <a href="{% url 'request_loan' %}"
+               class="btn finance-btn w-100">
+                Request Loan
+            </a>
         </div>
 
-    </div>
-
-    <div class="col-md-3">
-
-        <div class="dashboard-card card-pending">
-
-            <h5>Pending Requests</h5>
-
-            <h2>
-                {{ pending_requests }}
-            </h2>
-
+        <div class="col-md-3">
+            <a href="{% url 'my_loans' %}"
+               class="btn finance-btn w-100">
+                My Loans
+            </a>
         </div>
 
     </div>
 
 </div>
 
-<hr class="my-4">
-
-<div class="row g-3 mb-4">
-
-    {% if user.role != 'MEMBER' %}
-    <div class="col">
-        <a href="{% url 'apply_membership' %}"
-           class="dashboard-btn">
-            Apply Membership
-        </a>
-    </div>
-    {% endif %}
-
-    <div class="col">
-        <a href="{% url 'deposit_request' %}"
-           class="dashboard-btn">
-            Deposit
-        </a>
-    </div>
-
-    <div class="col">
-        <a href="{% url 'request_loan' %}"
-           class="dashboard-btn">
-            Loan Request
-        </a>
-    </div>
-
-    <div class="col">
-        <a href="{% url 'my_loans' %}"
-           class="dashboard-btn">
-            My Loans
-        </a>
-    </div>
-
-</div>
 {% endblock %}

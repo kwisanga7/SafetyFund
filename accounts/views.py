@@ -44,6 +44,7 @@ from finance.models import (
     Loan,
     LoanRepayment
 )
+from feedback.models import Feedback
 
 def register(request):
 
@@ -278,11 +279,39 @@ def admin_dashboard(request):
         'active_loans': active_loans,
     }
 
+    # Feedback statistics
+    feedback_total = Feedback.objects.count()
+
+    feedback_open = Feedback.objects.filter(
+     status='OPEN'
+        ).count()
+
+    feedback_review = Feedback.objects.filter(
+     status='REVIEW'
+       ).count()
+
+    feedback_progress = Feedback.objects.filter(
+     status='PROGRESS'
+      ).count()
+
     return render(
-        request,
-        'accounts/admin_dashboard.html',
-        context
-    )
+    request,
+    'accounts/admin_dashboard.html',
+    {
+        # your existing context...
+
+        'feedback_total': feedback_total,
+        'feedback_open': feedback_open,
+        'feedback_review': feedback_review,
+        'feedback_progress': feedback_progress,
+    }
+)
+
+#    return render(
+ #       request,
+  #      'accounts/admin_dashboard.html',
+   #     context
+    #)
 
 
 @login_required
@@ -706,11 +735,38 @@ def developer_dashboard(request):
 
     }
 
+    # Feedback statistics
+    feedback_total = Feedback.objects.count()
+
+    feedback_open = Feedback.objects.filter(
+    status='OPEN'
+    ).count()
+
+    feedback_review = Feedback.objects.filter(
+    status='REVIEW'
+    ).count()
+
+    feedback_progress = Feedback.objects.filter(
+    status='PROGRESS'
+).count()
+
     return render(
-        request,
-        'accounts/developer_dashboard.html',
-        context
-    )
+    request,
+    'accounts/developer_dashboard.html',
+    {
+        # your existing context...
+
+'feedback_total': feedback_total,
+'feedback_open': feedback_open,
+'feedback_review': feedback_review,
+'feedback_progress': feedback_progress,
+    }
+)
+  #  return render(
+   #     request,
+    #    'accounts/developer_dashboard.html',
+     #   context
+    #)
 
 
 

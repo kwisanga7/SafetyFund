@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>My Feedback</h2>
+
+<table>
+
+<tr>
+    <th>Title</th>
+    <th>Type</th>
+    <th>Status</th>
+</tr>
+
+{% for item in feedbacks %}
+<tr>
+    <td>
+    <a href="{% url 'feedback_detail' item.id %}">
+        {{ item.title }}
+    </a>
+</td>
+    <td>{{ item.title }}</td>
+    <td>{{ item.issue_type }}</td>
+    <td>{{ item.status }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}
+
