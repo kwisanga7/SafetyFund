@@ -16,7 +16,9 @@ from .views import (
     pending_repayments,
     approve_repayment,
     reject_repayment,
-    my_loans
+    my_loans,
+    deposit_history,
+    loan_records,
 )
 
 
@@ -71,6 +73,16 @@ path(
     pending_deposits,
     name='pending_deposits'
 ),
+path(
+    'deposit-history/',
+    deposit_history,
+    name='deposit_history'
+),
+path(
+    'loan-records/',
+    loan_records,
+    name='loan_records'
+),
 
 path(
     'approve-deposit/<int:deposit_id>/',
@@ -106,18 +118,6 @@ path(
     reject_repayment,
     name='reject_repayment'
 ),
-path(
-    'pending-deposits/',
-    pending_deposits,
-    name='pending_deposits'
-),
-
-path(
-    'pending-loans/',
-    pending_loans,
-    name='pending_loans'
-),
-
 path(
     'my-loans/',
     my_loans,

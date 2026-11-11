@@ -8,6 +8,7 @@ class NotificationAdmin(admin.ModelAdmin):
     list_display = (
         'user',
         'title',
+        'link',
         'is_read',
         'created_at'
     )

@@ -18,7 +18,7 @@
     <div class="row g-4">
 
         <div class="col-md-3">
-            <a href="{% url 'deposit_request' %}"
+            <a href="{% url 'my_loans' %}"
                class="card-link">
                 <div class="card dashboard-card">
                     <div class="card-body">
@@ -31,13 +31,13 @@
         </div>
 
         <div class="col-md-3">
-            <a href="{% url 'deposit_request' %}"
+            <a href="{% url 'profile' %}"
                class="card-link">
                 <div class="card dashboard-card">
                     <div class="card-body">
-                        <h5>available Shares</h5>
+                        <h5>Available Shares</h5>
                         <h2>{{ available_shares }}</h2>
-                        <small>available Shares</small>
+                        <small>View your financial summary</small>
                     </div>
                 </div>
             </a>
@@ -68,14 +68,14 @@
                 </div>
             </a>
         </div>
-                <div class="col-md-3">
+        <div class="col-md-3">
             <a href="{% url 'my_loans' %}"
                class="card-link">
                 <div class="card dashboard-card">
                     <div class="card-body">
-                        <h5>Pending Requests</h5>
-                        <h2>{{ pending_requests }}</h2>
-                        <small>Track requests</small>
+                        <h5>Pending Loans</h5>
+                        <h2>{{ pending_loans }}</h2>
+                        <small>Track loan requests</small>
                     </div>
                 </div>
             </a>

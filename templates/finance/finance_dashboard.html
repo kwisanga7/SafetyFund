@@ -7,82 +7,48 @@
     <h1 class="mb-3">Finance Dashboard</h1>
     <hr>
 
-    <style>
-
-        .dashboard-card {
-            transition: all 0.3s ease;
-            border: none;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            border-radius: 12px;
-        }
-
-        .dashboard-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-            cursor: pointer;
-        }
-
-        .dashboard-card h5 {
-            color: #555;
-            margin-bottom: 10px;
-        }
-
-        .dashboard-card h2 {
-            color: #198754;
-            font-weight: bold;
-        }
-
-        .card-link {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .finance-btn {
-            background-color: #198754;
-            color: white;
-            border: none;
-        }
-
-        .finance-btn:hover {
-            background-color: #146c43;
-            color: white;
-        }
-
-    </style>
-
     <div class="row">
 
         <!-- Total Members -->
 
         <div class="col-md-4 mb-4">
-            <div class="card dashboard-card">
-                <div class="card-body text-center">
-                    <h5>Total Members</h5>
-                    <h2>{{ total_members }}</h2>
+            <a href="{% url 'manage_members' %}" class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body text-center">
+                        <h5>Total Members</h5>
+                        <h2>{{ total_members }}</h2>
+                        <small>View members</small>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Total Shares -->
 
         <div class="col-md-4 mb-4">
-            <div class="card dashboard-card">
-                <div class="card-body text-center">
-                    <h5>Total Shares</h5>
-                    <h2>{{ total_shares }}</h2>
+            <a href="{% url 'compliance_report' %}" class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body text-center">
+                        <h5>Total Shares</h5>
+                        <h2>{{ total_shares }}</h2>
+                        <small>View contribution report</small>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Total Savings -->
 
         <div class="col-md-4 mb-4">
-            <div class="card dashboard-card">
-                <div class="card-body text-center">
-                    <h5>Total Savings</h5>
-                    <h2>{{ total_savings }} RWF</h2>
+            <a href="{% url 'compliance_report' %}" class="card-link">
+                <div class="card dashboard-card">
+                    <div class="card-body text-center">
+                        <h5>Total Savings</h5>
+                        <h2>{{ total_savings }} RWF</h2>
+                        <small>View contribution report</small>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
 
         <!-- Pending Deposits -->
@@ -102,7 +68,7 @@
         <!-- Approved Deposits -->
 
         <div class="col-md-4 mb-4">
-            <a href="{% url 'pending_deposits' %}" class="card-link">
+            <a href="{% url 'deposit_history' %}?status=APPROVED" class="card-link">
                 <div class="card dashboard-card">
                     <div class="card-body text-center">
                         <h5>Approved Deposits</h5>
@@ -116,7 +82,7 @@
         <!-- Monthly Deposits -->
 
         <div class="col-md-4 mb-4">
-            <a href="{% url 'pending_deposits' %}" class="card-link">
+            <a href="{% url 'deposit_history' %}?period=month" class="card-link">
                 <div class="card dashboard-card">
                     <div class="card-body text-center">
                         <h5>This Month's Deposits</h5>
@@ -144,7 +110,7 @@
         <!-- Active Loans -->
 
         <div class="col-md-4 mb-4">
-            <a href="{% url 'my_loans' %}" class="card-link">
+            <a href="{% url 'loan_records' %}?status=APPROVED" class="card-link">
                 <div class="card dashboard-card">
                     <div class="card-body text-center">
                         <h5>Active Loans</h5>
@@ -158,7 +124,7 @@
         <!-- Outstanding Loans -->
 
         <div class="col-md-4 mb-4">
-            <a href="{% url 'compliance_report' %}" class="card-link">
+            <a href="{% url 'loan_records' %}?status=APPROVED" class="card-link">
                 <div class="card dashboard-card">
                     <div class="card-body text-center">
                         <h5>Outstanding Loans</h5>

@@ -1,50 +1,27 @@
-from django.shortcuts import render, redirect
+import os
+
+from django.conf import settings
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from .forms import RegisterForm
-from finance.models import ShareTransaction
-from membership.models import MembershipApplication
-from django.db import models
-from finance.models import Loan
-from finance.models import DepositRequest
-from finance.models import ShareTransaction, Loan
-from finance.models import DepositRequest, Loan
-from .models import User
-from django.shortcuts import get_object_or_404
-from .models import Announcement
-from django.forms import ModelForm
-from accounts.models import Announcement
-from .forms import ProfileUpdateForm
-from django.conf import settings
-from membership.models import MembershipApplication
-from finance.models import DepositRequest, Loan
-from notifications.models import Notification
-from activitylogs.models import ActivityLog
-from django.shortcuts import render, redirect
-from .models import SiteSetting
-from django.contrib.auth.decorators import login_required
-from membership.models import MembershipApplication
-
-from django.http import HttpResponse
-from reportlab.pdfgen import canvas
-from membership.models import MembershipApplication
-
-from django.http import HttpResponse
-from django.template.loader import get_template
-from django.conf import settings
 from django.contrib.staticfiles import finders
-from membership.models import MembershipApplication
+from django.db import models
+from django.forms import ModelForm
+from django.http import HttpResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import get_template
+from django.urls import reverse
 from xhtml2pdf import pisa
-import os
-from django.contrib import messages
 
-from finance.models import (
-    ShareTransaction,
-    DepositRequest,
-    Loan,
-    LoanRepayment
-)
+from activitylogs.models import ActivityLog
 from feedback.models import Feedback
+from finance.models import DepositRequest, Loan, LoanRepayment, ShareTransaction
+from membership.models import MembershipApplication
+from notifications.services import notify_everyone, notify_roles, notify_user
+
+from .forms import ProfileUpdateForm, RegisterForm
+from .models import Announcement, SiteSetting, User
+
 
 def register(request):
 
@@ -61,17 +38,13 @@ def register(request):
                 action='Registered a new account'
             )
 
-            admins = User.objects.filter(
-                role='ADMINISTRATOR'
+            notify_roles(
+                ['ADMINISTRATOR', 'DEVELOPER'],
+                title='New account registration',
+                message=f'{user.username} has registered.',
+                link=reverse('manage_users'),
+                exclude=user,
             )
-
-            for admin in admins:
-
-                Notification.objects.create(
-                    user=admin,
-                    title='New User Registration',
-                    message=f'{user.username} has registered.'
-                )
 
             messages.success(
                 request,
@@ -116,8 +89,6 @@ def login_user(request):
         if user is not None:
 
             login(request, user)
-
-            print("LOGIN SUCCESS:",user.username,user.role)
 
             if user.role == 'ADMINISTRATOR':
                 return redirect('admin_dashboard')
@@ -212,6 +183,11 @@ def dashboard(request):
     status='APPROVED'
     ).count()
 
+    pending_loans = Loan.objects.filter(
+        member=request.user,
+        status='PENDING'
+    ).count()
+
     context = {
         'membership': membership,
         'total_shares': total_shares,
@@ -223,6 +199,7 @@ def dashboard(request):
         'member_deposits': member_deposits,
         'share_value': share_value,
         'active_loans': active_loans,
+        'pending_loans': pending_loans,
     }
 
     return render(
@@ -294,39 +271,27 @@ def admin_dashboard(request):
      status='PROGRESS'
       ).count()
 
-    return render(
-    request,
-    'accounts/admin_dashboard.html',
-    {
-        # your existing context...
-
+    context.update({
         'feedback_total': feedback_total,
         'feedback_open': feedback_open,
         'feedback_review': feedback_review,
         'feedback_progress': feedback_progress,
-    }
-)
+    })
 
-#    return render(
- #       request,
-  #      'accounts/admin_dashboard.html',
-   #     context
-    #)
-
+    return render(request, 'accounts/admin_dashboard.html', context)
 
 @login_required
 def manage_members(request):
+    query = request.GET.get('q')
+    members = User.objects.filter(role='MEMBER')
 
-    members = User.objects.filter(
-        role='MEMBER'
-    )
+    if query:
+        members = members.filter(username__icontains=query)
 
     return render(
         request,
         'accounts/manage_members.html',
-        {
-            'members': members
-        }
+        {'members': members, 'query': query},
     )
 
 @login_required
@@ -382,30 +347,6 @@ def member_detail(request, user_id):
     )
 
 @login_required
-def manage_members(request):
-
-    query = request.GET.get('q')
-
-    members = User.objects.filter(
-        role='MEMBER'
-    )
-
-    if query:
-
-        members = members.filter(
-            username__icontains=query
-        )
-
-    return render(
-        request,
-        'accounts/manage_members.html',
-        {
-            'members': members,
-            'query': query
-        }
-    )
-
-@login_required
 def manage_users(request):
 
     users = User.objects.all().order_by('username')
@@ -430,8 +371,17 @@ def change_role(
         id=user_id
     )
 
+    previous_role = user.role
     user.role = role
-    user.save()
+    user.save(update_fields=['role'])
+
+    if previous_role != role and user != request.user:
+        notify_user(
+            user,
+            title='Your account role was updated',
+            message=f'Your role changed from {previous_role} to {user.get_role_display()}.',
+            link=reverse('profile'),
+        )
 
     return redirect(
         'manage_users'
@@ -452,8 +402,23 @@ def toggle_user_status(request, user_id):
     )
 
     user.is_active = not user.is_active
+    user.save(update_fields=['is_active'])
 
-    user.save()
+    if user.is_active:
+        notify_user(
+            user,
+            title='Your account is active',
+            message='An administrator has reactivated your account.',
+            link=reverse('dashboard'),
+        )
+    else:
+        notify_roles(
+            ['ADMINISTRATOR', 'DEVELOPER'],
+            title='Account deactivated',
+            message=f'{user.username} was deactivated by {request.user.username}.',
+            link=reverse('manage_users'),
+            exclude=request.user,
+        )
 
     return redirect(
         'manage_users'
@@ -510,20 +475,17 @@ def add_announcement(request):
         )
 
         if form.is_valid():
-
-          announcement = form.save()
-
-        users = User.objects.all()
-
-        for user in users:
-
-         Notification.objects.create(
-            user=user,
-            title='New Announcement',
-            message=f'New announcement: {announcement.title}'
-        )
-
-        return redirect('announcements')
+            announcement = form.save()
+            notify_everyone(
+                title='New announcement',
+                message=announcement.title,
+                link=reverse(
+                    'announcement_detail',
+                    kwargs={'announcement_id': announcement.pk},
+                ),
+                exclude=request.user,
+            )
+            return redirect('announcements')
 
 
     else:
@@ -596,6 +558,15 @@ def edit_announcement(request, announcement_id):
             announcement.image = request.FILES.get('image')
 
         announcement.save()
+        notify_everyone(
+            title='Announcement updated',
+            message=announcement.title,
+            link=reverse(
+                'announcement_detail',
+                kwargs={'announcement_id': announcement.pk},
+            ),
+            exclude=request.user,
+        )
 
         return redirect('announcements')
 
@@ -617,17 +588,16 @@ def delete_announcement(request, announcement_id):
         id=announcement_id
     )
 
+    announcement_title = announcement.title
     announcement.delete()
+    notify_everyone(
+        title='Announcement removed',
+        message=announcement_title,
+        link=reverse('announcements'),
+        exclude=request.user,
+    )
 
     return redirect('announcements')
-
-@login_required
-def apply_membership(request):
-
-    if request.user.role != 'USER':
-        return redirect('dashboard')
-
-    # existing code
 
 @login_required
 def profile(request):
@@ -665,8 +635,17 @@ def edit_profile(request):
         )
 
         if form.is_valid():
-
+            changed_fields = form.changed_data
             form.save()
+
+            if changed_fields:
+                notify_roles(
+                    ['ADMINISTRATOR', 'DEVELOPER'],
+                    title='Member profile updated',
+                    message=f'{request.user.username} updated their profile.',
+                    link=reverse('member_detail', kwargs={'user_id': request.user.pk}),
+                    exclude=request.user,
+                )
 
             return redirect('profile')
 
@@ -750,25 +729,14 @@ def developer_dashboard(request):
     status='PROGRESS'
 ).count()
 
-    return render(
-    request,
-    'accounts/developer_dashboard.html',
-    {
-        # your existing context...
+    context.update({
+        'feedback_total': feedback_total,
+        'feedback_open': feedback_open,
+        'feedback_review': feedback_review,
+        'feedback_progress': feedback_progress,
+    })
 
-'feedback_total': feedback_total,
-'feedback_open': feedback_open,
-'feedback_review': feedback_review,
-'feedback_progress': feedback_progress,
-    }
-)
-  #  return render(
-   #     request,
-    #    'accounts/developer_dashboard.html',
-     #   context
-    #)
-
-
+    return render(request, 'accounts/developer_dashboard.html', context)
 
 @login_required
 def site_settings(request):
@@ -807,6 +775,14 @@ def site_settings(request):
 
         setting.save()
 
+        notify_roles(
+            ['DEVELOPER'],
+            title='Site settings updated',
+            message=f'{request.user.username} updated the site settings.',
+            link=reverse('site_settings'),
+            exclude=request.user,
+        )
+
         return redirect(
             'site_settings'
         )
@@ -831,11 +807,6 @@ def member_id_card(request):
         status='APPROVED'
     ).first()
 
-    print("MEMBERSHIP:", membership)
-
-    if membership:
-        print("QR:", membership.qr_code)
-
     return render(
         request,
         'accounts/member_id_card.html',
@@ -843,70 +814,6 @@ def member_id_card(request):
             'membership': membership
         }
     )
-
-
-@login_required
-def download_member_card(request):
-
-    membership = MembershipApplication.objects.filter(
-        user=request.user,
-        status='APPROVED'
-    ).first()
-
-    response = HttpResponse(
-        content_type='application/pdf'
-    )
-
-    response[
-        'Content-Disposition'
-    ] = 'attachment; filename="SafetyFund_ID_Card.pdf"'
-
-    p = canvas.Canvas(response)
-
-    p.setFont("Helvetica-Bold", 18)
-    p.drawString(
-        100,
-        780,
-        "SafetyFund Membership Card"
-    )
-
-    p.setFont("Helvetica", 12)
-
-    p.drawString(
-        100,
-        730,
-        f"Name: {request.user.get_full_name()}"
-    )
-
-    p.drawString(
-        100,
-        710,
-        f"Username: {request.user.username}"
-    )
-
-    p.drawString(
-        100,
-        690,
-        f"Member Number: {membership.member_number}"
-    )
-
-    p.drawString(
-        100,
-        670,
-        f"Role: {request.user.get_role_display()}"
-    )
-
-    p.drawString(
-        100,
-        650,
-        f"Joined: {membership.approved_date.strftime('%d-%m-%Y')}"
-    )
-
-    p.save()
-
-    return response
-
-
 
 
 def link_callback(uri, rel):

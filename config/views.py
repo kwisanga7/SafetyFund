@@ -1,13 +1,5 @@
 from django.shortcuts import render
 from accounts.models import Announcement
-from django.contrib.auth.decorators import login_required
-
-@login_required
-def dashboard(request):
-    return render(request, 'accounts/dashboard.html')
-
-
-
 
 
 def home(request):

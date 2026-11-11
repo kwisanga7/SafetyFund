@@ -1,39 +1,61 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container py-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h1 class="h2 mb-1">Notifications</h1>
+            <p class="text-muted mb-0">
+                {{ unread_notifications }} unread
+            </p>
+        </div>
 
+        {% if unread_notifications %}
+        <form method="post" action="{% url 'mark_all_notifications_read' %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-outline-primary">
+                Mark all as read
+            </button>
+        </form>
+        {% endif %}
+    </div>
 
+    <div class="notification-list">
+        {% for notification in notifications %}
+        <article class="card mb-3 {% if not notification.is_read %}border-success{% endif %}">
+            <div class="card-body d-flex flex-wrap align-items-start justify-content-between gap-3">
+                <div>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <h2 class="h5 mb-0">{{ notification.title }}</h2>
+                        {% if not notification.is_read %}
+                        <span class="badge text-bg-success">New</span>
+                        {% endif %}
+                    </div>
+                    <p class="mb-2">{{ notification.message }}</p>
+                    <time class="small text-muted" datetime="{{ notification.created_at|date:'c' }}">
+                        {{ notification.created_at|date:"M d, Y H:i" }}
+                    </time>
+                </div>
 
-<h2>
-    Notifications
-</h2>
-
-{% for notification in notifications %}
-
-<div class="card mb-3">
-
-    <div class="notification-card">
-
-    <h5>{{ notification.title }}</h5>
-
-    <p>{{ notification.message }}</p>
-
-    <small>
-        {{ notification.created_at|date:"M d, Y H:i" }}
-    </small>
-
+                {% if not notification.is_read %}
+                <form method="post" action="{% url 'mark_notification_read' notification.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-sm btn-outline-primary">
+                        {% if notification.link %}Open{% else %}Mark as read{% endif %}
+                    </button>
+                </form>
+                {% elif notification.link %}
+                <a href="{{ notification.link }}" class="btn btn-sm btn-outline-primary">
+                    Open
+                </a>
+                {% endif %}
+            </div>
+        </article>
+        {% empty %}
+        <div class="alert alert-info mb-0" role="status">
+            You’re all caught up. New notifications will appear here.
+        </div>
+        {% endfor %}
+    </div>
 </div>
-
-</div>
-
-{% empty %}
-
-<div class="alert alert-info">
-
-    No notifications available.
-
-</div>
-
-{% endfor %}
-
 {% endblock %}

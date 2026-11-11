@@ -1,27 +1,23 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
-from membership.models import MembershipApplication
-from .forms import LoanRequestForm
-from .models import LoanRepayment
-from django.contrib.auth import get_user_model
-from .forms import DepositRequestForm
 from datetime import datetime
 from decimal import Decimal
-from django.shortcuts import get_object_or_404
-from accounts.models import User
-from .models import ShareTransaction, Loan, DepositRequest
-from .forms import LoanRepaymentForm
-from .forms import MemberRepaymentForm
-from decimal import Decimal
-from finance.models import (ShareTransaction, Loan, DepositRequest)
-from accounts.models import Announcement
-from notifications.models import Notification
-from activitylogs.models import ActivityLog
-User = get_user_model()
-from django.contrib.auth.decorators import login_required
-from .models import Loan
 
+from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+
+from activitylogs.models import ActivityLog
+from notifications.services import notify_roles, notify_user
+
+from .forms import (
+    DepositRequestForm,
+    LoanRequestForm,
+    MemberRepaymentForm,
+)
+from .models import DepositRequest, Loan, LoanRepayment, ShareTransaction
+
+User = get_user_model()
 
 
 @login_required
@@ -46,16 +42,12 @@ def request_loan(request):
     action='Submitted loan request'
 )
 
-            finance_users = User.objects.filter(
-            role='FINANCE'
-            )
-
-            for finance in finance_users:
-
-              Notification.objects.create(
-                    user=finance,
-                    title='New Loan Request',
-                    message=f'{request.user.username} submitted a loan request.'
+            notify_roles(
+                ['FINANCE'],
+                title='New loan request',
+                message=f'{request.user.username} submitted a loan request.',
+                link=reverse('pending_loans'),
+                exclude=request.user,
             )
 
             return redirect('dashboard')
@@ -178,10 +170,11 @@ def approve_loan(request, loan_id):
 
     loan.save()
 
-    Notification.objects.create(
-    user=loan.member,
-    title='Loan Approved',
-    message=f'Your loan request of {loan.amount} RWF has been approved.'
+    notify_user(
+        loan.member,
+        title='Loan approved',
+        message=f'Your loan request of {loan.requested_amount} RWF has been approved.',
+        link=reverse('my_loans'),
     )
 
     return redirect(
@@ -206,6 +199,13 @@ def reject_loan(request, loan_id):
 
     loan.save()
 
+    notify_user(
+        loan.member,
+        title='Loan request update',
+        message=f'Your loan request of {loan.requested_amount} RWF was not approved.',
+        link=reverse('my_loans'),
+    )
+
     return redirect(
         'pending_loans'
     )
@@ -228,15 +228,25 @@ def mark_loan_paid(
         id=loan_id
     )
 
+    final_payment = loan.remaining_balance or loan.requested_amount
+
     LoanRepayment.objects.create(
         loan=loan,
-        amount_paid=loan.requested_amount,
-        received_by=request.user
+        amount_paid=final_payment,
+        status='APPROVED',
     )
 
     loan.status = 'PAID'
+    loan.remaining_balance = Decimal('0.00')
 
     loan.save()
+
+    notify_user(
+        loan.member,
+        title='Loan marked as paid',
+        message='Your loan has been marked as paid.',
+        link=reverse('my_loans'),
+    )
 
     return redirect(
         'pending_loans'
@@ -303,6 +313,14 @@ def deposit_request(request):
              action='Submitted deposit request'
             )
 
+            notify_roles(
+                ['FINANCE'],
+                title='New deposit request',
+                message=f'{request.user.username} submitted a deposit of {deposit.amount} RWF.',
+                link=reverse('pending_deposits'),
+                exclude=request.user,
+            )
+
             return redirect(
                 'dashboard'
             )
@@ -348,11 +366,12 @@ def approve_deposit(request, deposit_id):
         deposit.status = 'APPROVED'
         deposit.save()
 
-        Notification.objects.create(
-    user=deposit.member,
-    title='Deposit Approved',
-    message=f'Your deposit of {deposit.amount} RWF has been approved.'
-)
+        notify_user(
+            deposit.member,
+            title='Deposit approved',
+            message=f'Your deposit of {deposit.amount} RWF has been approved.',
+            link=reverse('dashboard'),
+        )
 
     return redirect(
         'finance_dashboard'
@@ -374,6 +393,13 @@ def reject_deposit(request, deposit_id):
 
     deposit.status = 'REJECTED'
     deposit.save()
+
+    notify_user(
+        deposit.member,
+        title='Deposit request update',
+        message=f'Your deposit of {deposit.amount} RWF was not approved.',
+        link=reverse('dashboard'),
+    )
 
     return redirect(
         'finance_dashboard'
@@ -398,81 +424,52 @@ def pending_deposits(request):
         {'deposits': deposits}
     )
 
+
 @login_required
-def active_loans(request):
+def deposit_history(request):
+    if request.user.role not in ['FINANCE', 'ADMINISTRATOR', 'DEVELOPER']:
+        return render(request, 'finance/access_denied.html')
 
-    if request.user.role != 'FINANCE':
-        return render(
-            request,
-            'finance/access_denied.html'
-        )
-
-    loans = Loan.objects.filter(
-        status='APPROVED'
+    deposits = DepositRequest.objects.select_related('member').order_by(
+        '-submitted_at'
     )
+    status = request.GET.get('status')
+    valid_statuses = {value for value, _label in DepositRequest.STATUS_CHOICES}
+
+    if status in valid_statuses:
+        deposits = deposits.filter(status=status)
+
+    period = request.GET.get('period')
+    if period == 'month':
+        deposits = deposits.filter(
+            submitted_at__month=datetime.now().month,
+            submitted_at__year=datetime.now().year,
+        )
 
     return render(
         request,
-        'finance/active_loans.html',
-        {'loans': loans}
+        'finance/deposit_history.html',
+        {'deposits': deposits, 'status': status, 'period': period},
     )
 
+
 @login_required
-def record_repayment(request, loan_id):
+def loan_records(request):
+    if request.user.role not in ['FINANCE', 'ADMINISTRATOR', 'DEVELOPER']:
+        return render(request, 'finance/access_denied.html')
 
-    if request.user.role != 'FINANCE':
-        return render(
-            request,
-            'finance/access_denied.html'
-        )
+    loans = Loan.objects.select_related('member').order_by('-requested_at')
+    status = request.GET.get('status')
+    valid_statuses = {value for value, _label in Loan.STATUS_CHOICES}
 
-    loan = Loan.objects.get(id=loan_id)
-
-    if request.method == 'POST':
-
-        form = LoanRepaymentForm(
-            request.POST
-        )
-
-        if form.is_valid():
-
-            repayment = form.save(
-                commit=False
-            )
-
-            repayment.loan = loan
-
-            repayment.save()
-
-            loan.remaining_balance -= (
-                repayment.amount_paid
-            )
-
-            if loan.remaining_balance <= 0:
-
-                loan.remaining_balance = 0
-                loan.status = 'COMPLETED'
-                loan.locked_shares = 0
-
-            loan.save()
-
-            return redirect(
-                'active_loans'
-            )
-
-    else:
-
-        form = LoanRepaymentForm()
+    if status in valid_statuses:
+        loans = loans.filter(status=status)
 
     return render(
         request,
-        'finance/record_repayment.html',
-        {
-            'loan': loan,
-            'form': form
-        }
+        'finance/loan_records.html',
+        {'loans': loans, 'status': status},
     )
-
 
 @login_required
 def make_repayment(request, loan_id):
@@ -498,6 +495,14 @@ def make_repayment(request, loan_id):
             repayment.loan = loan
 
             repayment.save()
+
+            notify_roles(
+                ['FINANCE'],
+                title='New loan repayment request',
+                message=f'{request.user.username} submitted a repayment of {repayment.amount_paid} RWF.',
+                link=reverse('pending_repayments'),
+                exclude=request.user,
+            )
 
             return redirect(
                 'dashboard'
@@ -572,6 +577,13 @@ def approve_repayment(request, repayment_id):
         repayment.status = 'APPROVED'
         repayment.save()
 
+        notify_user(
+            loan.member,
+            title='Repayment approved',
+            message=f'Your repayment of {repayment.amount_paid} RWF has been approved.',
+            link=reverse('my_loans'),
+        )
+
     return redirect(
         'pending_repayments'
     )
@@ -592,66 +604,16 @@ def reject_repayment(request, repayment_id):
     repayment.status = 'REJECTED'
     repayment.save()
 
+    notify_user(
+        repayment.loan.member,
+        title='Repayment request update',
+        message=f'Your repayment of {repayment.amount_paid} RWF was not approved.',
+        link=reverse('my_loans'),
+    )
+
     return redirect(
         'pending_repayments'
     )
-
-
-
-@login_required
-def dashboard(request):
-
-    total_shares = ShareTransaction.objects.filter(
-        member=request.user
-    ).count()
-
-    total_deposits = DepositRequest.objects.filter(
-        member=request.user,
-        status='APPROVED'
-    ).count()
-
-    active_loans = Loan.objects.filter(
-        member=request.user,
-        status='APPROVED'
-    ).count()
-
-    pending_requests = DepositRequest.objects.filter(
-        member=request.user,
-        status='PENDING'
-    ).count()
-
-    context = {
-        'total_shares': total_shares,
-        'total_deposits': total_deposits,
-        'active_loans': active_loans,
-        'pending_requests': pending_requests,
-    }
-
-    return render(
-        request,
-        'accounts/dashboard.html',
-        context
-    )
-
-
-
-def home(request):
-
-    latest_announcements = Announcement.objects.order_by(
-        '-created_at'
-    )[:3]
-
-    context = {
-        'latest_announcements': latest_announcements
-    }
-
-    return render(
-        request,
-        'home.html',
-        context
-    )
-
-
 
 @login_required
 def my_loans(request):
@@ -666,71 +628,4 @@ def my_loans(request):
         {
             'loans': loans
         }
-    )
-
-
-@login_required
-def dashboard(request):
-
-    total_shares = (
-        ShareTransaction.objects.filter(
-            member=request.user
-        ).aggregate(
-            total=Sum('shares')
-        )['total'] or 0
-    )
-
-    locked_shares = (
-        Loan.objects.filter(
-            member=request.user,
-            status='APPROVED'
-        ).aggregate(
-            total=Sum('locked_shares')
-        )['total'] or 0
-    )
-
-    available_shares = (
-        total_shares -
-        locked_shares
-    )
-
-    total_deposits = (
-        DepositRequest.objects.filter(
-            member=request.user,
-            status='APPROVED'
-        ).aggregate(
-            total=Sum('amount')
-        )['total'] or 0
-    )
-
-    active_loans = Loan.objects.filter(
-        member=request.user,
-        status='APPROVED'
-    ).count()
-
-    pending_requests = (
-        DepositRequest.objects.filter(
-            member=request.user,
-            status='PENDING'
-        ).count()
-        +
-        Loan.objects.filter(
-            member=request.user,
-            status='PENDING'
-        ).count()
-    )
-
-    context = {
-        'total_shares': total_shares,
-        'available_shares': available_shares,
-        'locked_shares': locked_shares,
-        'total_deposits': total_deposits,
-        'active_loans': active_loans,
-        'pending_requests': pending_requests,
-    }
-
-    return render(
-        request,
-        'accounts/dashboard.html',
-        context
     )

@@ -144,22 +144,22 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Configure PostgreSQL
+### Configure the application
 
-Update your database settings in `settings.py`:
+For local development, the project uses `safetyfund_dev.sqlite3` by default so it does not reuse an older database created before the custom user model was added. For PostgreSQL, set these environment variables before starting Django:
 
-```python
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'safetyfund_db',
-        'USER': 'postgres',
-        'PASSWORD': 'your_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+Windows PowerShell:
+
+```powershell
+$env:DB_ENGINE = "django.db.backends.postgresql"
+$env:DB_NAME = "safetyfund_db"
+$env:DB_USER = "postgres"
+$env:DB_PASSWORD = "your database password"
+$env:DB_HOST = "localhost"
+$env:DB_PORT = "5432"
 ```
+
+Set `DJANGO_SECRET_KEY` to a private, randomly generated value and `DJANGO_DEBUG=false` in production. Set `DJANGO_ALLOWED_HOSTS` to a comma-separated list of the deployment's hostnames. Production startup fails if `DEBUG` is disabled and no secret key is configured.
 
 ### Apply Migrations
 

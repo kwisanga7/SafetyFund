@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from .forms import (
     FeedbackForm,
@@ -9,6 +10,7 @@ from .forms import (
 )
 
 from .models import Feedback
+from notifications.services import notify_roles, notify_users
 
 
 User = get_user_model()
@@ -24,6 +26,17 @@ def create_feedback(request):
             feedback = form.save(commit=False)
             feedback.created_by = request.user
             feedback.save()
+
+            notify_roles(
+                ['ADMINISTRATOR', 'DEVELOPER'],
+                title='New feedback submitted',
+                message=f'{request.user.username} submitted: {feedback.title}',
+                link=reverse(
+                    'feedback_detail',
+                    kwargs={'pk': feedback.pk},
+                ),
+                exclude=request.user,
+            )
 
             return redirect('my_feedback')
 
@@ -101,6 +114,17 @@ def feedback_detail(request, pk):
 
                 comment.save()
 
+                notify_users(
+                    [feedback.created_by, feedback.assigned_to],
+                    title='New feedback comment',
+                    message=f'{request.user.username} commented on “{feedback.title}”.',
+                    link=reverse(
+                        'feedback_detail',
+                        kwargs={'pk': feedback.pk},
+                    ),
+                    exclude=request.user,
+                )
+
                 return redirect(
                     'feedback_detail',
                     pk=feedback.pk
@@ -121,7 +145,39 @@ def feedback_detail(request, pk):
             )
 
             if review_form.is_valid():
-                review_form.save()
+                previous_status = feedback.status
+                previous_priority = feedback.priority
+                previous_assignee_id = feedback.assigned_to_id
+                feedback = review_form.save()
+
+                updates = []
+                if feedback.status != previous_status:
+                    updates.append(
+                        f'status changed to {feedback.get_status_display()}'
+                    )
+                if feedback.priority != previous_priority:
+                    updates.append(
+                        f'priority changed to {feedback.get_priority_display()}'
+                    )
+                if feedback.assigned_to_id != previous_assignee_id:
+                    if feedback.assigned_to:
+                        updates.append(
+                            f'assigned to {feedback.assigned_to.username}'
+                        )
+                    else:
+                        updates.append('assignment removed')
+
+                if updates:
+                    notify_users(
+                        [feedback.created_by, feedback.assigned_to],
+                        title='Feedback updated',
+                        message=f'{feedback.title}: {", ".join(updates)}.',
+                        link=reverse(
+                            'feedback_detail',
+                            kwargs={'pk': feedback.pk},
+                        ),
+                        exclude=request.user,
+                    )
 
                 return redirect(
                     'feedback_detail',

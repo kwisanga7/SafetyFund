@@ -66,7 +66,7 @@
     </a>
 
 
-    <a href="{% url 'pending_deposits' %}" class="card-link">
+    <a href="{% url 'deposit_history' %}?status=PENDING" class="card-link">
         <div class="dashboard-card">
             <h5>Pending Deposits</h5>
             <h2>{{ pending_deposits }}</h2>
@@ -75,7 +75,7 @@
     </a>
 
 
-    <a href="{% url 'pending_loans' %}" class="card-link">
+    <a href="{% url 'loan_records' %}?status=PENDING" class="card-link">
         <div class="dashboard-card">
             <h5>Pending Loans</h5>
             <h2>{{ pending_loans }}</h2>
@@ -84,7 +84,7 @@
     </a>
 
 
-    <a href="#" class="card-link">
+    <a href="{% url 'loan_records' %}?status=APPROVED" class="card-link">
         <div class="dashboard-card">
             <h5>Active Loans</h5>
             <h2>{{ active_loans }}</h2>
@@ -98,7 +98,7 @@
 <div class="row g-3 mb-4">
 
     <div class="col-md-3">
-
+        <a href="{% url 'admin_feedback' %}" class="card-link">
         <div class="card shadow-sm h-100">
 
             <div class="card-body">
@@ -111,22 +111,16 @@
                     {{ feedback_total }}
                 </h2>
 
-                <a
-                    href="{% url 'admin_feedback' %}"
-                    class="btn btn-sm btn-primary"
-                >
-                    View Feedback
-                </a>
-
             </div>
 
         </div>
+        </a>
 
     </div>
 
 
     <div class="col-md-3">
-
+        <a href="{% url 'admin_feedback' %}" class="card-link">
         <div class="card shadow-sm h-100">
 
             <div class="card-body">
@@ -139,22 +133,16 @@
                     {{ feedback_open }}
                 </h2>
 
-                <a
-                    href="{% url 'admin_feedback' %}"
-                    class="btn btn-sm btn-outline-primary"
-                >
-                    View
-                </a>
-
             </div>
 
         </div>
+        </a>
 
     </div>
 
 
     <div class="col-md-3">
-
+        <a href="{% url 'admin_feedback' %}" class="card-link">
         <div class="card shadow-sm h-100">
 
             <div class="card-body">
@@ -167,22 +155,16 @@
                     {{ feedback_review }}
                 </h2>
 
-                <a
-                    href="{% url 'admin_feedback' %}"
-                    class="btn btn-sm btn-outline-warning"
-                >
-                    View
-                </a>
-
             </div>
 
         </div>
+        </a>
 
     </div>
 
 
     <div class="col-md-3">
-
+        <a href="{% url 'admin_feedback' %}" class="card-link">
         <div class="card shadow-sm h-100">
 
             <div class="card-body">
@@ -195,73 +177,13 @@
                     {{ feedback_progress }}
                 </h2>
 
-                <a
-                    href="{% url 'admin_feedback' %}"
-                    class="btn btn-sm btn-outline-success"
-                >
-                    View
-                </a>
-
             </div>
 
         </div>
+        </a>
 
     </div>
 
 </div>
-
-    <!--
-    <hr class="my-5">
-
-    <h4 class="mb-3">Management</h4>
-
-    <div class="row g-3">
-
-        <div class="col-md-3">
-            <a href="{% url 'review_memberships' %}"
-               class="btn finance-btn">
-                Review Memberships
-            </a>
-        </div>
-
-        <div class="col-md-3">
-            <a href="{% url 'manage_members' %}"
-               class="btn finance-btn">
-                Manage Members
-            </a>
-        </div>
-
-        <div class="col-md-3">
-            <a href="{% url 'manage_users' %}"
-               class="btn finance-btn">
-                Manage Users
-            </a>
-        </div>
-
-        <div class="col-md-3">
-            <a href="#"
-               class="btn finance-btn">
-                Manage Finance Officers
-            </a>
-        </div>
-
-        <div class="col-md-3">
-            <a href="{% url 'announcements' %}"
-               class="btn finance-btn">
-                Announcements
-            </a>
-        </div>
-
-        <div class="col-md-3">
-            <a href="{% url 'add_announcement' %}"
-               class="btn finance-btn">
-                Add Announcement
-            </a>
-        </div>
-
-    </div>
-
-</div>
--->
 
 {% endblock %}

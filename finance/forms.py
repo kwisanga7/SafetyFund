@@ -1,9 +1,7 @@
 from django import forms
-from .models import Loan
 from django.db.models import Sum
-from .models import Loan, ShareTransaction
-from .models import DepositRequest
-from .models import LoanRepayment
+
+from .models import DepositRequest, Loan, LoanRepayment, ShareTransaction
 
 
 class LoanRequestForm(forms.ModelForm):
@@ -73,15 +71,6 @@ class DepositRequestForm(forms.ModelForm):
         ]
 
 
-
-class LoanRepaymentForm(forms.ModelForm):
-
-    class Meta:
-        model = LoanRepayment
-
-        fields = [
-            'amount_paid'
-        ]
 
 class MemberRepaymentForm(forms.ModelForm):
 

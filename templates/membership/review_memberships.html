@@ -47,49 +47,6 @@
             <td>
                 {{ application.status }}
             </td>
-<!--
-            <td>
-
-{% if application.payment_proof %}
-
-    <a href="{{ application.payment_proof.url }}"
-       target="_blank">
-
-        View Proof
-
-    </a>
-
-{% else %}
-
-    No File
-
-{% endif %}
-
-</td>
-
-
-
-<td>
-
-    {% if application.payment_proof %}
-
-        <a href="{{ application.payment_proof.url }}"
-           target="_blank"
-           class="btn btn-sm btn-success">
-
-            Open Proof
-
-        </a>
-
-    {% else %}
-
-        No Proof
-
-    {% endif %}
-
-</td>
--->
-
 <td>
     <a href="{{ application.payment_proof.url }}"
        target="_blank"

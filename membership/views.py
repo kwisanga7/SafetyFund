@@ -1,13 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from .forms import MembershipApplicationForm
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from .models import MembershipApplication
-from notifications.models import Notification
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+
 from activitylogs.models import ActivityLog
-from django.shortcuts import render, get_object_or_404
+from notifications.services import notify_roles, notify_user
+
+from .forms import MembershipApplicationForm
 from .models import MembershipApplication
-from accounts.models import User
 
 
 @login_required
@@ -46,17 +45,13 @@ def apply_membership(request):
     action='Submitted membership application'
 )
 
-            admins = User.objects.filter(
-              role='ADMINISTRATOR'
-              )
-
-            for admin in admins:
-
-             Notification.objects.create(
-             user=admin,
-                title='New Membership Application',
-                message=f'{request.user.username} submitted a membership application.'
-             )
+            notify_roles(
+                ['ADMINISTRATOR', 'DEVELOPER'],
+                title='New membership application',
+                message=f'{request.user.username} submitted a membership application.',
+                link=reverse('review_memberships'),
+                exclude=request.user,
+            )
 
             return redirect(
                 'dashboard'
@@ -110,10 +105,11 @@ def approve_membership(request, application_id):
     action=f'Approved membership for {application.user.username}'
     )
 
-    Notification.objects.create(
-    user=application.user,
-    title='Membership Approved',
-    message='Congratulations! Your membership application has been approved.'
+    notify_user(
+        application.user,
+        title='Membership approved',
+        message='Your membership application has been approved.',
+        link=reverse('dashboard'),
     )
 
     return redirect(
@@ -130,6 +126,13 @@ def reject_membership(request, application_id):
 
     application.status = 'REJECTED'
     application.save()
+
+    notify_user(
+        application.user,
+        title='Membership application update',
+        message='Your membership application was not approved. You can review your details and apply again.',
+        link=reverse('apply_membership'),
+    )
 
     return redirect(
         'review_memberships'

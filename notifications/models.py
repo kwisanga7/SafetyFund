@@ -15,6 +15,11 @@ class Notification(models.Model):
 
     message = models.TextField()
 
+    link = models.CharField(
+        max_length=500,
+        blank=True,
+    )
+
     is_read = models.BooleanField(
         default=False
     )

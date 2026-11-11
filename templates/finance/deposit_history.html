@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+            <h1 class="h2 mb-1">Deposit Records</h1>
+            <p class="text-muted mb-0">Approved and pending member deposits.</p>
+        </div>
+        <a href="{% url 'pending_deposits' %}" class="btn btn-outline-primary">
+            Review pending deposits
+        </a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr>
+                    <th>Member</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                    <th>Proof</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for deposit in deposits %}
+                <tr>
+                    <td>{{ deposit.member.get_full_name|default:deposit.member.username }}</td>
+                    <td>{{ deposit.amount }} RWF</td>
+                    <td>{{ deposit.get_status_display }}</td>
+                    <td>{{ deposit.submitted_at|date:"M d, Y" }}</td>
+                    <td>
+                        {% if deposit.payment_proof %}
+                        <a href="{{ deposit.payment_proof.url }}" target="_blank" rel="noopener">
+                            View proof
+                        </a>
+                        {% else %}
+                        <span class="text-muted">Not provided</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center text-muted py-4">
+                        No deposit records match this view.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
